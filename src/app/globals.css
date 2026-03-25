@@ -1,0 +1,198 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --parchment: #FDF6EC;
+  --parchment-dark: #F5E6CC;
+  --bark: #3D2B1F;
+  --bark-light: #5C4033;
+  --bark-muted: #8B7355;
+  --gold: #C8963E;
+  --gold-light: #E8C778;
+  --gold-dark: #A07830;
+  --sky-lavender: #C8B8E8;
+  --cloud-pink: #F4C2D0;
+  --forest: #2D5A3D;
+  --forest-dark: #1A3A28;
+  --crystal: #5B8FD4;
+  --mist-blue: #B8D4F0;
+}
+
+html {
+  scroll-padding-top: 100px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  background-color: var(--parchment);
+  color: var(--bark-light);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--gold);
+  color: var(--parchment);
+}
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    font-family: var(--font-heading);
+    color: var(--bark);
+  }
+}
+
+/* Keyframes */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes sparkle-drift {
+  0% {
+    transform: translateY(0) translateX(0) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(-10vh) translateX(var(--drift, 5px)) scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateY(-40vh) translateX(calc(var(--drift, 5px) * -0.5)) scale(0.8);
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-85vh) translateX(var(--drift, 5px)) scale(0.2);
+    opacity: 0;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes glow-pulse-gold {
+  0%, 100% { box-shadow: 0 0 40px rgba(200, 150, 62, 0.1); }
+  50% { box-shadow: 0 0 80px rgba(200, 150, 62, 0.25); }
+}
+
+@keyframes gentle-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@layer utilities {
+  .section-padding {
+    @apply py-16 md:py-24 lg:py-32;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .glass-warm {
+    background: rgba(253, 246, 236, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(200, 150, 62, 0.12);
+  }
+
+  .glass-warm-strong {
+    background: rgba(253, 246, 236, 0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(200, 150, 62, 0.15);
+  }
+
+  .gradient-border-gold {
+    position: relative;
+  }
+
+  .gradient-border-gold::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200, 150, 62, 0.4), transparent);
+  }
+
+  .crystal-shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(200, 150, 62, 0.3) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .animate-gentle-bob {
+    animation: gentle-bob 3s ease-in-out infinite;
+  }
+
+  .backface-hidden {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+}
+
+/* Skip to content */
+.skip-to-content {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background: var(--gold);
+  color: var(--parchment);
+  font-weight: 500;
+  border-radius: 0 0 0.5rem 0;
+  text-decoration: none;
+}
+
+.skip-to-content:focus {
+  left: 0;
+}
+
+/* Focus states */
+a:focus-visible,
+button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(200, 150, 62, 0.4);
+  border-radius: 4px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
