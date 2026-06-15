@@ -56,6 +56,7 @@ export default function Nav() {
       <nav
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+          "pt-[env(safe-area-inset-top)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]",
           scrolled
             ? "glass-warm-strong shadow-nav"
             : "bg-transparent"
@@ -147,7 +148,7 @@ export default function Nav() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-parchment z-50 flex flex-col"
+            className="fixed inset-0 bg-parchment z-50 flex flex-col pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]"
           >
             {/* Mobile header */}
             <div className="px-6">
