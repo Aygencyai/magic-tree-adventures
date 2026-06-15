@@ -43,14 +43,17 @@ Aligned to **Book One's real arc** (ends heading *toward* the mountain → Book 
 Every beat maps to an existing Barajas illustration — see `docs/higgsfield-asset-plan.md`.
 
 ```
-Scroll ↓
-  1. The Garden            apple tree + ivy cottage, drifting light          (book p8)
-  2. The Wish / tree glows  bark shimmers to liquid gold                     (book p13)
-  3. The Golden Door        a portal blooms open in the trunk ✦              (book p14–15)
-  4. Angelica reveal        step through → golden hills, blue lake,
-                            crystal mountain, lavender sky, pink clouds      (book p16–17)
-  5. Meet Alina & Gino      angel of voices + the winged lion appear         (book p18–21)
-  6. Toward the Mountain    run downhill; it glows in the distance → CTA     (book p23 / cover)
+Scroll ↓   (Book One's FULL arc — a complete loop; file refs in higgsfield-asset-plan.md)
+   1. The Garden            apple tree + ivy cottage
+   2. The Wish / tree glows  bark shimmers to liquid gold
+   3. The Golden Door        a portal blooms open in the trunk ✦
+   4. Angelica reveal        golden hills, blue lake, crystal mountain ✦   (hero plate ✅)
+   5. Meet Alina & Gino      angel of voices + the winged lion
+   6. The ferry crossing     Otter Joe's boat through the storm
+   7. Crystal Mountain       arrival + rainbow-winged Angel Ari ✦
+   8. The Crystal Cave       blue-crystal apples — Rory finds his voice (climax)
+   9. Flying home on Gino    soaring over lake + hills ✦                   (plate ✅)
+  10. Return to the garden   "The End (for now…)" → buy CTA
 ```
 
 Each scene = an existing painterly illustration rendered as **2.5D depth planes** (image + depth-map

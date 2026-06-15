@@ -25,7 +25,18 @@ Rendered files are `public/scenes/raw/page-NN.png` (regenerate via the `pdftoppm
 | page-10 | Alina full angel (left) + **Gino the lion** reveal (right) |
 | page-11 | Group + Alina + Gino (left/right), crystal mountain mid-distance |
 | page-12 | Tilly worried vignette (left) + **running downhill toward the mountain** (right) |
-| page-13…24 | Unviewed — second half of the story + back matter |
+| page-13 | Squirrel + spilt milk + Tilly fixes the bike (vignettes) |
+| page-14 | Gino + squirrel (left) + **the route MAP to Crystal Mountain** (right) |
+| page-15 | Storm vignette + **the ferry boat with Otter Joe** (right, book pp28–29) |
+| page-16 | **Crystal Mountain ARRIVAL** + rainbow-winged Angel Ari — panoramic, but ~60% text columns |
+| page-17 | **The Crystal Cave** — blue-crystal-apple trees (the climax) |
+| page-18 | Rory plucks his blue crystal, glowing (vignettes) |
+| page-19 | **Flying home on Gino** — epic panoramic spread |
+| page-20 | Gino hugs Rory (left) + all the angels gather (right) |
+| page-21 | Back in the garden — "The End (for now…)" |
+| page-22 | **All About Chakras** — meditating child + 7 individual chakra cards (ready-made `/chakras` art) |
+| page-23 | What is a Chakra / Angels + **real author photos** (Jools Abrams, Sara Oberman Babai, Alejandra Barajas) |
+| page-24 | **Clean text-free crystal mountain** in a circle (back cover) — isolated asset |
 
 ## ⚠️ Rights check (confirm before publishing AI-extended art)
 The illustrations are commissioned work (Barajas / StoryTerrace). Using them on the book's own
@@ -43,19 +54,27 @@ as in-scope with the client/publisher. Not a blocker for building — a flag bef
   - **Gino** — friendly lion, big red-orange mane, tiny wings (needs his voice too).
   - **Otter Joe** — otter ferryman, captain's hat, yellow jacket. **Squirrel** — pink jacket.
 
-## The journey — aligned to Book One's REAL arc
-Book One ends with the children heading *toward* the Crystal Mountain (the crossing/summit is the
-cliffhanger → Book Two). So the homepage scroll should end on the mountain glowing in the distance +
-a "the adventure continues / get the book" CTA — not a fabricated summit scene.
+## The journey — Book One's FULL arc (corrected after reading the whole book)
+**Correction:** Book One does NOT end before the lake — the full adventure is in this book
+(ferry → mountain → cave → fly home → return). So the scroll is a **complete loop**, ending on
+"The End (for now…)" + the buy CTA. (Earlier note that the lake/summit was a Book-Two cliffhanger
+was wrong.) Beats reference the rendered file index `page-NN` (see mapping table above).
 
-| # | Beat | Primary book source | What we already have |
-|---|------|---------------------|----------------------|
-| 1 | **The Garden** — apple tree, ivy cottage, dusk | p8 (garden + 3 kids), p4–5 foliage corners, p10 tree | Full scene + characters + UI motifs |
-| 2 | **The Wish / tree glows** — liquid-gold bark | p13 (glowing tree) | Full scene |
-| 3 | **The Golden Door opens** (the portal) | p14–15 (door in trunk, halo of light) | Full scene |
-| 4 | **Angelica reveal** (the wow) — golden hills, blue lake, crystal mountain, lavender sky | p16–17 (wide spread) | Near-widescreen hero plate ✦ |
-| 5 | **Meet Alina & Gino** | p12/p18 (Alina), p19–21 (Gino) | Full scenes + portraits |
-| 6 | **Toward the Crystal Mountain** → CTA | p23 (running downhill), p1 cover (mountain), p6 map | Motion scene + iconic mountain |
+| # | Beat | Source file | Notes |
+|---|------|-------------|-------|
+| 1 | **The Garden** — apple tree, ivy cottage | page-05 (left half) | half-spread → crop before outpaint |
+| 2 | **The Wish / tree glows** | page-07 (right half) | half-spread → crop |
+| 3 | **The Golden Door opens** (portal) | page-08 | door + halo |
+| 4 | **Angelica reveal** (hero) ✦ | page-09 | ✅ outpainted (clean) |
+| 5 | **Meet Alina & Gino** | page-10 / page-11 | angel + winged lion |
+| 6 | **The ferry across the lake** — Otter Joe, the storm | page-15 (right) | half-spread → crop |
+| 7 | **Crystal Mountain arrival** + Angel Ari ✦ | page-16 | ⚠ text-heavy → crop band, redo |
+| 8 | **The Crystal Cave** — blue-crystal apples (climax) | page-17 | crop illustration |
+| 9 | **Flying home on Gino** ✦ | page-19 | ✅ outpainted (minor captions to clean) |
+| 10 | **Return to the garden** → "The End (for now…)" + CTA | page-21 | closes the loop |
+
+Freebies (no AI generation needed): **chakra art** (page-22) for `/chakras`; **author photos**
+(page-23) for `/about`; **clean crystal mountain** (page-24) as an isolated motif.
 
 ## Per-beat Higgsfield operations
 
@@ -105,5 +124,20 @@ a "the adventure continues / get the book" CTA — not a fabricated summit scene
 7. Global assets: chakra crystals, cloud/mist layers, corner flourishes.
 
 ## Net-new vs reuse
-- **~90% reuse/extend** of existing Barajas art — the right call for brand fidelity.
-- **Net-new only:** chakra crystal lights, particle textures, possibly a cloud layer. The old "Blue Lake ferry crossing" beat is **dropped** for Book One (it's a Book-Two teaser) — saves a fully-generated scene.
+- **~95% reuse/extend** of existing Barajas art — the right call for brand fidelity.
+- **Net-new only:** particle textures (firefly/sparkle), possibly a cloud layer. Chakra crystals are NOT net-new — the book's chakra art (page-22) covers it.
+
+## Phase 1 progress & learnings (2026-06-15)
+**Done (uploaded → outpainted 16:9, saved in `public/scenes/processed/`):**
+- `beat4-angelica-reveal-16x9.png` — clean ✅
+- `beat9-flying-home-16x9.png` — great; minor scattered book captions to inpaint ✅
+- `beat7-crystal-mountain-arrival-16x9.png` — ⚠ kept the spread's text columns; **redo via crop-first**
+- `public/scenes/video/beat4-angelica-reveal-loop.mp4` — **animation validated** ✅ (image→video, `grok_video_v15`, start_image = the outpainted hero job_id; drifting clouds + shimmer + butterflies, art preserved; 5s 720p, **22 cr**). Full pipeline proven: book art → outpaint → animate.
+
+**Learnings:**
+- `outpaint_image` is excellent + cheap (~2 cr) and **perfectly preserves Barajas's style** on **panoramic-art spreads** (hero, flying). Confirmed pipeline: `media_upload` (batch via `files[]`) → curl PUT → `media_confirm` → `outpaint_image` (16:9) → `job_status` → download.
+- **Text-heavy spreads need a crop-to-illustration step BEFORE outpaint** (arrival p16; also the half-spread scenes: garden p05-left, glowing tree p07-right, ferry p15-right). `sips` only does centered crops (no offset) → **add a crop tool** (install `sharp`, or a tiny canvas/Node script) as Phase-1 tooling.
+- Then a **text-clean inpaint pass** (`nano_banana_2`) removes residual captions on the kept plates.
+- Workspace: Aygency team (3000 cr); spend so far trivial (6 cr for 3 plates).
+
+**Remaining queue:** crop+outpaint beats 1,2,6,7,8,10 · text-clean pass · character sprites (`remove_background`) · crop chakra cards (p22) + author photos (p23) + clean mountain (p24) · depth maps (local, Phase 2) · video loops (`generate_video`).
