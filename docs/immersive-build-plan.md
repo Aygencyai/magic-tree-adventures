@@ -314,16 +314,76 @@ sections, not part of the book.
 **Exit:** journey lands on beats; the friends beat is its own scene; the tail feels like the
 book; no jank; mobile solid; Lighthouse acceptable; reduced-motion + keyboard paths work.
 
-## Phase 6 — Inner-page polish & cohesion
+## Phase 6 — Every page is its own immersive experience
 
-**Goal:** Bring Story/Chakras/About/Buy up to the new bar (absorbs the old `polish-plan.md`).
-**Scope:**
-- Story page: journey map + character deep dives (the one unfinished page).
-- Swap inner-page placeholders for Phase 1 generated art.
-- Micro-interactions, typography/spacing pass, visual tie-in to the hero.
-**Deliverables:** Cohesive, premium site end-to-end.
-**Dependencies:** Phases 1–5.
-**Exit:** Whole site feels like one studio-built experience; old polish-plan stages closed.
+**Decision (Louis, 2026-06-15):** a mixed site (immersive homepage + plain inner pages) "doesn't
+really work." So **every page becomes its own scroll experience** in the same painterly Barajas
+art style — built on the homepage engine, with page-specific art (generated via Higgsfield to
+stay on-style) + page-specific content. **The Story page is removed** (the homepage journey *is*
+the story). End state: Home (the journey) · Chakras · About · Buy — four cohesive experiences,
+one world.
+
+> **Why this reverses the earlier "inner pages stay Framer+CSS for SEO" note:** the new
+> directive is full cohesion. We keep SEO/perf safe by **server-rendering each page's real copy
+> as DOM text** (the canvas is decoration over crawlable content) and code-splitting/disposing
+> each canvas per route. SEO is a build constraint here, not a reason to keep pages plain.
+
+### 6.0 Generalise the experience engine into a reusable per-page system
+The engine is already 90% generic — make it fully parameterised so each page is just *data*:
+- `SceneEngine` already takes `defs: SceneDef[]` ✅. Generalise `JourneyOverlays` (drop the
+  `import { JOURNEY }`; take a `journey` prop) and `ExperienceMount` (take `journey` + compute
+  track height from it). `StaticJourney` already maps any journey — pass it the same array.
+- `scenes.ts` → one exported journey per page: `HOME_JOURNEY` (current `JOURNEY`),
+  `CHAKRAS_JOURNEY`, `ABOUT_JOURNEY`, `BUY_JOURNEY`. Same `SceneDef` shape (image/depth/tint/
+  copy/flags). Snap-to-beat (Phase 5A), `?p=`, progress bar, reduced-motion static fallback,
+  nav-over-track all work unchanged for every page.
+- Each route renders `<Experience journey={X} />`; one engine, four data sets.
+
+### 6.1 Chakras experience (`/chakras`)
+Natural fit — the 7 chakras are already a beat sequence with rich copy in `constants.ts`.
+- Beats: intro ("The Magic Inside Every Child") → **one beat per chakra** (Root→Crown) → close
+  (→ Buy / Home). Each chakra beat: its painterly scene, the chakra colour as tint, the orb
+  igniting, copy from `CHAKRAS` (`childFriendly` + `meaning` + `tryThis` + `storyConnection`).
+- Art: generate per-chakra plates in Barajas style from the book's **page-22** chakra art + each
+  chakra's story moment (e.g. Throat = the crystal cave). Replaces today's Chakra Explorer.
+
+### 6.2 About experience (`/about`)
+- **Content correction (Louis):** the About page features **Sara (Author)** and **Alejandra
+  Barajas (Illustrator)** — two people. ⚠ This overrides current `constants.ts` `CREATORS`
+  (which lists *Jools Abrams* as Author and Sara as "Spiritual Guide"). Reattribute Sara →
+  Author and **drop Jools** from About. *(Flagged for final confirm — author credit is
+  high-stakes; see session note.)*
+- Beats: the origin (1964, the old apple tree, Poppa Stan's bedtime stories — the 60-year
+  story) → **Sara, the author** → **Alejandra, the illustrator** → invite/close.
+- Art: generate origin/garden scenes from book **page-05/06**; for Sara + Alejandra use the real
+  author photos (book **page-23**, already in `public/about/`) set in painterly frames, or
+  generate Barajas-style portrait scenes — tailored to read as part of the world.
+
+### 6.3 Buy experience (`/buy`)
+- Its own tailored experience, but **conversion stays front-and-centre**: the actual buy action
+  (price, format, purchase link) must be prominent and crawlable — the experience frames it, it
+  doesn't bury it.
+- Beats: the book hero (cover / crystal mountain, book **page-01/24**) → "what's inside" (journey
+  + chakras teaser) → a review beat → strong **buy CTA** beat (price/format/buy button).
+
+### 6.4 Remove the Story page
+- Delete `/story` route + its components (`JourneyMap`, `CharacterDeepDive`, `StoryTeaser`, etc.
+  — confirm none are reused). Drop "The Story" from `NAV_LINKS` (`constants.ts`). The homepage
+  journey carries the story. Update any internal links that pointed at `/story` (e.g. the
+  journey/StaticJourney "Explore the Story" CTA → point Home or Chakras).
+
+### 6.5 Assets, perf, SEO, a11y across all experiences
+- **Higgsfield generation pass** for Chakras (7+ plates), About (origin + creators), Buy
+  (book-focused) — same outpaint + text-clean + web-webp + depth-proxy pipeline as Phase 1;
+  `select_workspace` first; rights note applies. Watch credit balance (ample).
+- Per-page **reduced-motion static fallback** (StaticJourney already generalises), code-split +
+  dispose each canvas on route change, real copy SSR'd for SEO, per-page `<title>`/OG, 375→1440
+  QA + mobile thermal, Lighthouse per page.
+
+**Dependencies:** Phases 1–5 (esp. the engine + snap + asset pipeline).
+**Exit:** Home / Chakras / About / Buy are four cohesive immersive experiences in one art world;
+Story removed; About credits correct (Sara author, Alejandra illustrator); every page has a
+reduced-motion fallback + crawlable content; no jank on mobile.
 
 ---
 
