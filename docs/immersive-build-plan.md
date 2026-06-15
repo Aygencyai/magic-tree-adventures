@@ -374,13 +374,32 @@ The engine is already 90% generic — make it fully parameterised so each page i
   nav-over-track all work unchanged for every page.
 - Each route renders `<Experience journey={X} />`; one engine, four data sets.
 
-### 6.1 Chakras experience (`/chakras`)
+### 6.1 Chakras experience (`/chakras`) ✅ DONE (2026-06-15)
+**Shipped:** `CHAKRAS_JOURNEY` in `engine/scenes.ts` — an 8-beat journey: the generated rainbow
+**intro** ("Every Child's Inner Rainbow") → **one beat per chakra** Root→Crown, each on the
+Phase-6.5 plate (`chakra-*-16x9`), tinted to the chakra colour, with a trimmed one-line Caveat
+narration drawn from `CHAKRAS` (`meaning` → kicker, `name` → title, story-flavoured line). Each
+plate already carries its own glowing chakra orb on the child, so **no special ignition layer** is
+needed (that's the home journey's 7-at-once arrival moment) — the generic overlay + engine tint do
+the rest, so this was pure data, zero engine/overlay changes. `/chakras` now renders
+`<Experience journey={CHAKRAS_JOURNEY} />` + a grounded, **crawlable** tail (the seven chakra
+names + affirmations as real DOM, the rainbow close, the Buy/Home CTAs) for SEO + reduced-motion.
+The old Framer `ChakraExplorer` (+ `ChakraSection`/`ChakraProgress`/`ChakraOrb`) is **removed**.
+
+**Verified (Playwright, prod build, real WebGL):** `pnpm build` clean (`/chakras` 2.29 kB /
+147 kB); beat-centres render clean at 1440 (intro / heart / crown) + 375 mobile (throat); nav
+transparent over the track; `?p=` deep-link drives every beat; **zero console errors** across all
+captures. The close + CTA live in the server-rendered tail.
+
+<details><summary>Original 6.1 scope</summary>
+
 Natural fit — the 7 chakras are already a beat sequence with rich copy in `constants.ts`.
 - Beats: intro ("The Magic Inside Every Child") → **one beat per chakra** (Root→Crown) → close
   (→ Buy / Home). Each chakra beat: its painterly scene, the chakra colour as tint, the orb
   igniting, copy from `CHAKRAS` (`childFriendly` + `meaning` + `tryThis` + `storyConnection`).
 - Art: generate per-chakra plates in Barajas style from the book's **page-22** chakra art + each
   chakra's story moment (e.g. Throat = the crystal cave). Replaces today's Chakra Explorer.
+</details>
 
 ### 6.2 About experience (`/about`)
 - **Content correction (Louis, confirmed 2026-06-15):** the About page features **Sara

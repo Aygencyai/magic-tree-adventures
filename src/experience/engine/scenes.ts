@@ -192,5 +192,123 @@ export const HOME_JOURNEY: SceneDef[] = [
   },
 ];
 
+/**
+ * The Chakras experience (Phase 6.1) — the seven energy centres as a calm,
+ * meditative beat sequence. One painterly plate per chakra (the book's page-22
+ * meditating-child cards, outpainted onto each chakra's colour field), plus a
+ * generated rainbow opener. Each plate already carries its own glowing chakra
+ * orb on the child, so the engine just tints the motes to the chakra colour and
+ * the overlay narrates it — no special ignition layer (that's the home journey's
+ * 7-at-once arrival moment). Copy is drawn from `CHAKRAS` in constants.ts,
+ * trimmed to one Caveat line per beat. The grounded "inner rainbow" close + CTA
+ * is server-rendered in the page tail (crawlable), not a journey beat.
+ */
+export const CHAKRAS_JOURNEY: SceneDef[] = [
+  {
+    id: "chakra-intro",
+    image: `${W}/chakra-intro-16x9.webp`,
+    depth: `${W}/chakra-intro-16x9.depth.webp`,
+    depthStrength: 0.04,
+    tint: 0xc8b8e8,
+    motes: 1.3,
+    overlay: {
+      kicker: "The magic inside",
+      title: "Every Child's Inner Rainbow",
+      line: "Seven little lights live inside you — spinning colours that help you feel brave, kind, and wonderfully you.",
+    },
+  },
+  {
+    id: "chakra-root",
+    image: `${W}/chakra-root-16x9.webp`,
+    depth: `${W}/chakra-root-16x9.depth.webp`,
+    depthStrength: 0.03,
+    tint: 0xe05555,
+    motes: 1.1,
+    overlay: {
+      kicker: "I am safe",
+      title: "The Root Chakra",
+      line: "Deep roots, like the old apple tree — the red glow that helps you feel strong, safe, and at home.",
+    },
+  },
+  {
+    id: "chakra-sacral",
+    image: `${W}/chakra-sacral-16x9.webp`,
+    depth: `${W}/chakra-sacral-16x9.depth.webp`,
+    depthStrength: 0.03,
+    tint: 0xf0923e,
+    motes: 1.15,
+    overlay: {
+      kicker: "I can create",
+      title: "The Sacral Chakra",
+      line: "The orange spark of fun and feelings — drawing, storytelling, the joy that makes adventures possible.",
+    },
+  },
+  {
+    id: "chakra-solar-plexus",
+    image: `${W}/chakra-solar-plexus-16x9.webp`,
+    depth: `${W}/chakra-solar-plexus-16x9.depth.webp`,
+    depthStrength: 0.03,
+    tint: 0xf0d03e,
+    motes: 1.2,
+    overlay: {
+      kicker: "I can do it",
+      title: "The Solar Plexus",
+      line: "Your inner sunshine — the golden confidence to climb higher and try brave new things.",
+    },
+  },
+  {
+    id: "chakra-heart",
+    image: `${W}/chakra-heart-16x9.webp`,
+    depth: `${W}/chakra-heart-16x9.depth.webp`,
+    depthStrength: 0.03,
+    tint: 0x5dbb63,
+    motes: 1.15,
+    overlay: {
+      kicker: "I am loved",
+      title: "The Heart Chakra",
+      line: "The green glow of love — caring for others, hugging your family, feeling warm when someone is kind.",
+    },
+  },
+  {
+    id: "chakra-throat",
+    image: `${W}/chakra-throat-16x9.webp`,
+    depth: `${W}/chakra-throat-16x9.depth.webp`,
+    depthStrength: 0.03,
+    tint: 0x5b8fd4,
+    motes: 1.15,
+    overlay: {
+      kicker: "I can speak my truth",
+      title: "The Throat Chakra",
+      line: "Rory's chakra — the blue light of finding your voice, singing your song, and being heard.",
+    },
+  },
+  {
+    id: "chakra-third-eye",
+    image: `${W}/chakra-third-eye-16x9.webp`,
+    depth: `${W}/chakra-third-eye-16x9.depth.webp`,
+    depthStrength: 0.03,
+    tint: 0x8b5dc8,
+    motes: 1.15,
+    overlay: {
+      kicker: "I can see clearly",
+      title: "The Third Eye",
+      line: "The indigo spark of imagination — big ideas, daydreams, and seeing answers clearly.",
+    },
+  },
+  {
+    id: "chakra-crown",
+    image: `${W}/chakra-crown-16x9.webp`,
+    depth: `${W}/chakra-crown-16x9.depth.webp`,
+    depthStrength: 0.03,
+    tint: 0xd4b8f0,
+    motes: 1.25,
+    overlay: {
+      kicker: "I am connected",
+      title: "The Crown Chakra",
+      line: "The violet light at the top of your head, connecting you to the stars, the trees, and everyone you love.",
+    },
+  },
+];
+
 /** Plate aspect — all processed plates are outpainted to 16:9 (2752×1536). */
 export const PLATE_ASPECT = 16 / 9;
