@@ -4,6 +4,7 @@ import { ParallaxScene } from "./ParallaxScene";
 import { ParticleField } from "./ParticleField";
 import { Atmosphere } from "./Atmosphere";
 import { Portal } from "./Portal";
+import { JourneySnap } from "./JourneySnap";
 import { detectQuality, type QualitySettings } from "./quality";
 import { journeyProgress } from "./progress";
 import { JOURNEY, PLATE_ASPECT, type SceneDef } from "./scenes";
@@ -32,6 +33,8 @@ export class SceneEngine {
   /** index of the beat the golden-door transition fires after (-1 = none) */
   private readonly portalIndex: number;
   private readonly lenis: Lenis;
+  /** snap-to-beat: eases the page to the nearest beat on scroll-idle (Phase 5A) */
+  private readonly snap: JourneySnap;
 
   private readonly pointer = new THREE.Vector2(0, 0);
   private readonly pointerTarget = new THREE.Vector2(0, 0);
@@ -83,6 +86,14 @@ export class SceneEngine {
     // Lenis smooths the actual page scroll; progress is read each frame from
     // the journey track (see ./progress), so engine + HTML overlays stay locked.
     this.lenis = new Lenis();
+
+    // Snap to the nearest beat on scroll-idle. Bypassed when ?p= freezes the
+    // journey; reduced motion never reaches here (StaticJourney renders instead).
+    this.snap = new JourneySnap(
+      this.lenis,
+      this.scenes.length,
+      () => this.forcedProgress !== null || this.quality.reducedMotion,
+    );
 
     this.onResize = this.onResize.bind(this);
     this.onPointerMove = this.onPointerMove.bind(this);
@@ -195,6 +206,7 @@ export class SceneEngine {
     cancelAnimationFrame(this.raf);
     window.removeEventListener("resize", this.onResize);
     window.removeEventListener("pointermove", this.onPointerMove);
+    this.snap.dispose();
     this.lenis.destroy();
     for (const s of this.scenes) s.dispose();
     this.particles.dispose();
