@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { JOURNEY } from "./engine/scenes";
+import type { SceneDef } from "./engine/scenes";
 
 /**
  * prefers-reduced-motion fallback for the immersive journey.
@@ -8,12 +8,12 @@ import { JOURNEY } from "./engine/scenes";
  * calm vertical storybook: each painterly plate with its Fraunces heading +
  * Caveat narration beneath, and the buy CTA on the closing beat. Same copy and
  * art as the canvas journey, so reduced-motion users get the full story without
- * the parallax/particles/portal.
+ * the parallax/particles/portal. Phase 6 — takes any page's `journey`.
  */
-export default function StaticJourney() {
+export default function StaticJourney({ journey }: { journey: SceneDef[] }) {
   return (
     <div className="bg-parchment">
-      {JOURNEY.map((beat) => (
+      {journey.map((beat) => (
         <section
           key={beat.id}
           className="mx-auto max-w-5xl px-6 py-12 lg:py-16"

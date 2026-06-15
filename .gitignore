@@ -17,3 +17,6 @@ dist/
 # masters, sprites, web textures, video loops) ARE committed.
 /public/scenes/crops/
 /public/characters/raw/
+
+# TS incremental build info
+*.tsbuildinfo

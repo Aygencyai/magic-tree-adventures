@@ -7,7 +7,7 @@ import { Portal } from "./Portal";
 import { JourneySnap } from "./JourneySnap";
 import { detectQuality, type QualitySettings } from "./quality";
 import { journeyProgress } from "./progress";
-import { JOURNEY, PLATE_ASPECT, type SceneDef } from "./scenes";
+import { HOME_JOURNEY, PLATE_ASPECT, type SceneDef } from "./scenes";
 
 const FOV = 45;
 const BASE_DIST = 5;
@@ -52,7 +52,7 @@ export class SceneEngine {
   private raf = 0;
   private disposed = false;
 
-  constructor(canvas: HTMLCanvasElement, defs: SceneDef[] = JOURNEY) {
+  constructor(canvas: HTMLCanvasElement, defs: SceneDef[] = HOME_JOURNEY) {
     this.quality = detectQuality();
 
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true });

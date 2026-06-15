@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import StaticJourney from "./StaticJourney";
-import { JOURNEY } from "./engine/scenes";
+import type { SceneDef } from "./engine/scenes";
 
 // Both layers are client-only: the canvas touches window/document and the
 // overlay's rAF reads window scroll — neither has SSR/SEO value (it's a
@@ -12,31 +12,36 @@ const ExperienceCanvas = dynamic(() => import("./ExperienceCanvas"), { ssr: fals
 const JourneyOverlays = dynamic(() => import("./JourneyOverlays"), { ssr: false });
 
 // ~135vh of scroll per beat — enough to read each beat's copy before it crossfades.
-const TRACK_VH = JOURNEY.length * 135;
+const TRACK_VH_PER_BEAT = 135;
 
 /**
- * The immersive journey block. A tall `[data-journey-track]` section whose
- * sticky child pins the canvas + overlays while you scroll the journey, then
- * releases — so anything rendered after this component (the homepage conversion
- * tail) scrolls up naturally over the released canvas. Journey progress maps to
- * this track (see engine/progress), not the whole document.
+ * The reusable immersive experience (Phase 6) — one engine, any page.
+ *
+ * A tall `[data-journey-track]` section whose sticky child pins the canvas +
+ * overlays while you scroll the journey, then releases — so anything rendered
+ * after this component scrolls up naturally over the released canvas. Journey
+ * progress maps to this track (see engine/progress), not the whole document.
+ * Pass the page's `journey`: snap-to-beat, `?p=`, the progress bar, and the
+ * reduced-motion static fallback all work unchanged for every route.
  *
  * `prefers-reduced-motion` swaps the whole thing for a calm static storybook.
  */
-export default function ExperienceMount() {
+export default function Experience({ journey }: { journey: SceneDef[] }) {
   const [reduced, setReduced] = useState(false);
   useEffect(() => {
     setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   }, []);
 
-  if (reduced) return <StaticJourney />;
+  if (reduced) return <StaticJourney journey={journey} />;
+
+  const trackVh = journey.length * TRACK_VH_PER_BEAT;
 
   return (
-    <section data-journey-track className="relative" style={{ height: `${TRACK_VH}vh` }}>
+    <section data-journey-track className="relative" style={{ height: `${trackVh}vh` }}>
       <div className="sticky top-0 h-screen overflow-hidden bg-parchment">
-        <ExperienceCanvas />
+        <ExperienceCanvas journey={journey} />
         {/* Beat-synced Fraunces/Caveat copy, chakra ignition, cameos, CTA, progress bar */}
-        <JourneyOverlays />
+        <JourneyOverlays journey={journey} />
       </div>
     </section>
   );

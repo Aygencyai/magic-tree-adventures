@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { JOURNEY } from "./engine/scenes";
+import type { SceneDef } from "./engine/scenes";
 import { journeyProgress, clamp01 } from "./engine/progress";
 import { CHAKRAS } from "@/lib/constants";
 
@@ -24,32 +24,33 @@ import { CHAKRAS } from "@/lib/constants";
  * prefers-reduced-motion rule neutralises those, and the rAF skips the y-rise.
  */
 
-const N = JOURNEY.length;
-const CENTER = (i: number) => (N > 1 ? i / (N - 1) : 0);
-const HALF = N > 1 ? 1 / (N - 1) / 2 : 0.5;
-const ARRIVAL = JOURNEY.findIndex((b) => b.chakraIgnite);
-
 const invlerp = (a: number, b: number, x: number) => (a === b ? 0 : clamp01((x - a) / (b - a)));
 const smooth = (x: number) => x * x * (3 - 2 * x);
 
 /** beat copy opacity — fade in/hold/out across the beat's scroll span */
-function beatOpacity(p: number, c: number) {
-  const inA = c - HALF;
-  const inB = c - HALF * 0.4;
-  const outA = c + HALF * 0.4;
-  const outB = c + HALF;
+function beatOpacity(p: number, c: number, half: number) {
+  const inA = c - half;
+  const inB = c - half * 0.4;
+  const outA = c + half * 0.4;
+  const outB = c + half;
   if (p <= inA || p >= outB) return 0;
   if (p < inB) return invlerp(inA, inB, p);
   if (p > outA) return 1 - invlerp(outA, outB, p);
   return 1;
 }
 
-export default function JourneyOverlays() {
+export default function JourneyOverlays({ journey }: { journey: SceneDef[] }) {
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
+
+    // per-journey beat geometry (Phase 6 — derived from the page's own journey)
+    const N = journey.length;
+    const center = (i: number) => (N > 1 ? i / (N - 1) : 0);
+    const half = N > 1 ? 1 / (N - 1) / 2 : 0.5;
+    const arrival = journey.findIndex((b) => b.chakraIgnite);
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -72,21 +73,21 @@ export default function JourneyOverlays() {
 
       for (const el of beatEls) {
         const i = Number(el.dataset.beat);
-        el.style.opacity = String(beatOpacity(p, CENTER(i)));
+        el.style.opacity = String(beatOpacity(p, center(i), half));
       }
       if (!reduce) {
         for (const el of cardEls) {
           const i = Number(el.dataset.card);
-          const c = CENTER(i);
-          const t = clamp01((p - (c - HALF)) / (2 * HALF)); // 0..1 across the beat
+          const c = center(i);
+          const t = clamp01((p - (c - half)) / (2 * half)); // 0..1 across the beat
           el.style.transform = `translateY(${(1 - t * 2) * 48}px)`; // +48 → 0 → −48
         }
       }
 
       // chakra ignition over the arrival beat (root → crown, staggered)
-      if (ARRIVAL >= 0) {
-        const c = CENTER(ARRIVAL);
-        const localP = invlerp(c - HALF, c + HALF, p);
+      if (arrival >= 0) {
+        const c = center(arrival);
+        const localP = invlerp(c - half, c + half, p);
         for (const el of orbEls) {
           const t0 = Number(el.dataset.orb);
           const k = smooth(invlerp(t0 - 0.06, t0 + 0.06, localP));
@@ -106,7 +107,7 @@ export default function JourneyOverlays() {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [journey]);
 
   return (
     <div ref={rootRef} className="pointer-events-none absolute inset-0 z-10 overflow-hidden">
@@ -119,7 +120,7 @@ export default function JourneyOverlays() {
         />
       </div>
       <ScrollHint />
-      {JOURNEY.map((beat, i) => (
+      {journey.map((beat, i) => (
         <div key={beat.id} data-beat={i} className="absolute inset-0" style={{ opacity: 0 }}>
           {beat.sprites && <Cameos sprites={beat.sprites} />}
           {beat.chakraIgnite && <ChakraIgnition />}
@@ -160,7 +161,7 @@ export default function JourneyOverlays() {
 
 /* ── character cameos (Alina & Gino on the "new friends" beat) ───────────── */
 
-function Cameos({ sprites }: { sprites: NonNullable<(typeof JOURNEY)[number]["sprites"]> }) {
+function Cameos({ sprites }: { sprites: NonNullable<SceneDef["sprites"]> }) {
   // CSS float (globals `float` keyframe); global prefers-reduced-motion neutralises it.
   return (
     <>

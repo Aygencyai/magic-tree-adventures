@@ -1,4 +1,5 @@
-import ExperienceMount from "@/experience/ExperienceMount";
+import Experience from "@/experience/Experience";
+import { HOME_JOURNEY } from "@/experience/engine/scenes";
 import Reviews from "@/components/home/Reviews";
 import Newsletter from "@/components/home/Newsletter";
 
@@ -14,7 +15,7 @@ import Newsletter from "@/components/home/Newsletter";
 export default function HomePage() {
   return (
     <>
-      <ExperienceMount />
+      <Experience journey={HOME_JOURNEY} />
 
       {/* Conversion tail — opaque, sits above the released sticky canvas */}
       <div id="conversion-tail" className="relative z-20 bg-parchment">

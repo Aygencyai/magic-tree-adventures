@@ -62,7 +62,10 @@ export interface SceneDef {
 
 const W = "/scenes/web";
 
-export const JOURNEY: SceneDef[] = [
+/** The homepage journey — Book One's full arc. One exported journey per page
+ *  (Phase 6): each route renders `<Experience journey={…} />` over this same
+ *  engine. CHAKRAS_JOURNEY / ABOUT_JOURNEY / BUY_JOURNEY are added in 6.1–6.3. */
+export const HOME_JOURNEY: SceneDef[] = [
   {
     id: "garden",
     image: `${W}/beat1-garden-16x9.webp`,

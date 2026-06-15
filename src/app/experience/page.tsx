@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import ExperienceMount from "@/experience/ExperienceMount";
+import Experience from "@/experience/Experience";
+import { HOME_JOURNEY } from "@/experience/engine/scenes";
 
 export const metadata: Metadata = {
   title: "Enter Angelica — The Magic Tree Adventures",
@@ -7,7 +8,7 @@ export const metadata: Metadata = {
     "Step through the golden door into Angelica — an immersive journey through the world of The Magic Tree Adventures.",
 };
 
-// Phase 0 spike route. The full journey replaces the homepage in later phases.
+// Journey-only route (no conversion tail) — handy for ?p= QA + sharing.
 export default function ExperiencePage() {
-  return <ExperienceMount />;
+  return <Experience journey={HOME_JOURNEY} />;
 }
