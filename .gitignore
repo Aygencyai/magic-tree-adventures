@@ -5,3 +5,9 @@ node_modules/
 dist/
 .next/
 *.log
+
+# Raw book-plate exports (~107MB) are regenerable from the source PDF via:
+#   pdftoppm -png -r 200 "~/Downloads/2026_01_The Magic Tree_INT.pdf" public/scenes/raw/page
+# Keep only page-09 (used by the Phase 0 spike); processed plates land elsewhere.
+/public/scenes/raw/*
+!/public/scenes/raw/page-09.png

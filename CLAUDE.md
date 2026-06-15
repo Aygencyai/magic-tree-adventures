@@ -7,7 +7,7 @@ A magical, immersive website for "The Magic Tree Adventures: Journey to the Crys
 - **Framework:** Next.js 14 (App Router)
 - **Language:** TypeScript (strict mode)
 - **Styling:** Tailwind CSS v3 + CSS custom properties in globals.css
-- **Animations:** Framer Motion — do not introduce GSAP or any other animation library
+- **Animations:** Framer Motion for UI/overlay motion. **WebGL via vanilla Three.js (NOT React Three Fiber) is permitted for the immersive experience layer** — see `src/experience/`. Postprocessing from `three/examples/jsm`. Smooth scroll via Lenis. Do not introduce GSAP or R3F (see Gotchas for why R3F is out).
 - **Fonts:** Fraunces (headings), Nunito (body/UI), Caveat (handwritten accents) — loaded via next/font/google
 - **Forms:** React Hook Form + Zod validation
 - **Email:** Resend (newsletter signups)
@@ -107,8 +107,9 @@ src/
 │   ├── home/                # Homepage sections (Hero, GoldenDoor, CharacterCards, etc.)
 │   ├── story/               # Story page components (JourneyMap, CharacterDeepDive)
 │   ├── chakras/             # Chakra Explorer components (ChakraOrb, ChakraProgress, etc.)
-│   ├── effects/             # Visual effects (FloatingParticles, GoldenGlow, CrystalShimmer, ParallaxLayer, PageTurn)
+│   ├── effects/             # CSS/Framer visual effects (FloatingParticles, GoldenGlow, CrystalShimmer, ParallaxLayer, PageTurn)
 │   └── ui/                  # Reusable primitives (Reveal, Button, SectionContainer, SectionHeading, MagneticButton, TiltCard)
+├── experience/             # WebGL immersive layer (Three.js/R3F) — reusable 3D module, dynamically imported per page (SSR-disabled). Any page may opt in; pages that don't use it load zero 3D.
 ├── lib/
 │   ├── animations.ts        # Shared animation variants (softer easing)
 │   ├── constants.ts         # Characters, chakras, creators, nav links — DO NOT MODIFY without asking
@@ -131,7 +132,9 @@ DO NOT MODIFY these files unless explicitly instructed:
 - The animation easing is `[0.25, 0.8, 0.25, 1]` — softer than aygency-site's `[0.16, 1, 0.3, 1]`. Do not use the aygency easing.
 - Buttons are `rounded-full` (pill shape), not `rounded-lg` like aygency-site. This is deliberate for the whimsical feel.
 - The `glass-warm` and `glass-warm-strong` utilities use parchment-tinted blur, not the dark blur from aygency-site.
-- No Three.js in this project. All visual effects are Framer Motion + CSS.
+- WebGL/Three.js lives **only** in `src/experience/` (a reusable, opt-in 3D module, dynamically imported with SSR disabled). It powers the immersive homepage journey and is the *delivery* layer for warm painterly art — never the look itself. Inner content pages stay Framer Motion + CSS so they load light and stay SEO-clean; they can opt into the 3D module if a specific moment needs it (e.g. a 3D chakra crystal), but never load it by default.
+- **Do NOT use React Three Fiber (R3F) here.** R3F v9 (the only version supporting React 19) is incompatible with this project's Next 14.2 App Router runtime: its reconciler reads React client internals Next 14 doesn't expose, crashing the canvas at module-eval with `Cannot read properties of undefined (reading 'S')`. Pinning React 19.1 and `transpilePackages` both failed to fix it. The experience layer uses **vanilla Three.js** (imperative `useEffect` + `requestAnimationFrame`), which has no react-reconciler and sidesteps the issue entirely. Revisit R3F only if the project moves to Next 15.
+- The Three.js render loop drives the camera from Lenis scroll progress + pointer; scenes are 2.5D displaced planes (illustration + depth map). The `/experience` route is the Phase 0 spike; the full journey replaces the homepage in later phases (see `docs/immersive-build-plan.md`).
 - The site uses `next/font/google` for font loading — do NOT use `<link>` tags or `@import`.
 
 ## Environment Variables
