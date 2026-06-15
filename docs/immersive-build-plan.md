@@ -237,17 +237,82 @@ woven into the Home-again beat + handoff links · `prefers-reduced-motion` stati
 **Exit:** Real content; keyboard + reduced-motion paths work; nav/CTAs correct.
 </details>
 
-## Phase 5 — Performance, responsive, a11y, SEO
+## Phase 5 — Feel, key assets, cohesion + ship-readiness
 
-**Goal:** Ship-ready.
-**Scope:**
-- Texture compression (KTX2/basis), lazy-load per scene, code-split canvas.
-- SSR-safe dynamic import; SEO meta/OG intact despite canvas.
+**Goal:** Make the journey *feel* right, fix the two weakest beats/sections, and get
+ship-ready (perf / responsive / a11y / SEO). Larger than the original Phase 5 — run it in the
+labelled workstreams below; commit per workstream. **Re-read this section at the start.**
+
+> **Decisions locked with Louis (2026-06-15) before this phase:**
+> snap-to-beat scroll · dedicated Alina & Gino plate generated from the book · the homepage
+> tail (Reviews/Newsletter) restyled to the book look. Inner-page cohesion stays Phase 6.
+
+### A. Snap-to-beat scroll (the journey should *land* on beats)
+**Problem:** pure analog scrubbing makes beats hard to rest on — the ideal spot (beat centred,
+transition complete) is a moving target and trackpad momentum overshoots.
+**Approach (hybrid snap, NOT full scroll-hijack):**
+- Keep analog scrubbing. On scroll-idle (debounce ~140ms after wheel/touch ends, when Lenis
+  velocity ≈ 0) animate `lenis.scrollTo(targetBeatScroll, { duration ~0.7, easeInOutCubic })`.
+- Target = beat centre scroll position = `round? ` nearest beat with a **direction bias**: if the
+  user moved >~25% toward the next beat in the scroll direction, snap to that next beat (so one
+  flick ≈ one beat); otherwise snap to nearest. Beat centre px = `i/(N-1) * trackLength`
+  (`trackLength = track.offsetHeight - innerHeight`, track offsetTop = 0).
+- Don't fight active input: only snap when idle; cancel the snap tween if the user scrolls again.
+- `?p=` (forced) bypasses snap entirely. Reduced-motion path is `StaticJourney` (no snap needed).
+- Lives where the scroll source is owned: the engine owns Lenis, so add the snap there (or a
+  small `useJourneySnap` reading the same Lenis/track). Keep engine + overlays still reading
+  `journeyProgress()` each frame — snap just nudges the scroll position they read.
+- **Exit:** a single flick advances ≈ one beat and settles centred with the transition finished;
+  no fighting the user; mobile + trackpad feel good; `?p=` still freezes.
+
+### B. Dedicated "Meet Alina & Gino" plate (it currently reuses the Angelica reveal)
+**Problem:** the `friends` beat shows the same plate as `angelica` with floating sprites → reads
+as the same scene.
+**Approach (generate from the book — Higgsfield, proven pipeline):**
+- Source: **book page-10** (Alina as a full *winged* angel + Gino the lion reveal); page-11 as
+  backup (group + Alina + Gino). Render from the interior PDF if `page-10` raw isn't present.
+- `select_workspace` at session start (MCP defaults to a hidden workspace). Crop to the
+  illustration → `media_upload` → `outpaint_image` 16:9 → `nano_banana_2` text-clean if captions
+  → download → `scripts/crop.mjs`/sharp → `public/scenes/web/beat-friends-16x9.webp` +
+  `.depth.webp` proxy. Default model Nano Banana 2 for any inpaint.
+- Update `scenes.ts`: `friends` beat points at the new plate (no longer reuses `beat4`). The
+  winged-angel plate also resolves the wingless-Alina loose end *for this beat* — so **drop the
+  floating Alina/Gino sprite cameos here** (they're now in the plate); re-judge if a subtle Gino
+  cameo still helps. ~tens of credits (well within balance).
+- Rights: same Barajas/StoryTerrace launch-gate note applies.
+- **Exit:** the `friends` beat is visibly its own scene with Alina & Gino as the focus.
+
+### C. Restyle the homepage tail (Reviews + Newsletter) to the book look
+**Problem:** after the journey releases, the tail (`Reviews`, `Newsletter`) reads like generic
+sections, not part of the book.
+**Approach (visual cohesion, still normal-flow — no WebGL):**
+- Carry the journey's language into the tail: parchment / parchment-dark grounds, a soft
+  painterly motif behind them (e.g. the `return-garden` plate or `clean-mountain` motif faded
+  low-opacity, or Phase-1 corner-flourish PNGs), Fraunces headings + Caveat accents, `glass-warm`
+  review cards, gold CTAs. Make journey→tail feel like turning to the book's closing pages.
+- Keep it light (CSS/Framer on a normal page); this is cohesion, not a second WebGL surface.
+- **Exit:** scrolling past "Back to the Garden" into Reviews/Newsletter feels like the same book,
+  just different info; nav still flips solid here.
+
+### D. Performance
+- Texture compression (KTX2/basis), lazy-load per scene, confirm canvas stays code-split.
+- Headless swiftshader over-brightens bloom; judge bloom/chakra-orb prominence on a real GPU and
+  bump **mobile chakra-orb contrast** (deferred from P3) if still faint.
+- Optional: real **Depth-Anything V2 / MiDaS** maps to replace the greyscale proxies (drop-in at
+  `*.depth.webp`, no code change) — decide if the extra parallax pop is worth it on real GPU.
+
+### E. Responsive + a11y
 - 375 → 768 → 1024 → 1440 QA; mobile thermal/perf check.
-- Lighthouse pass (target 90+ where feasible for an experience site).
-**Deliverables:** Optimised, responsive, accessible build.
+- **Skip-the-journey affordance** (deferred from P4): a keyboard-reachable "skip to the book" /
+  jump-to-tail link so the long journey isn't a keyboard trap. Confirm reduced-motion path.
+
+### F. SEO
+- SSR-safe dynamic import (already); **homepage `<title>` / OG** is still the layout default —
+  give `/` proper metadata despite the canvas. Confirm OG/meta on all routes.
+
 **Dependencies:** Phase 4.
-**Exit:** No jank; mobile solid; Lighthouse acceptable; reduced-motion fully functional.
+**Exit:** journey lands on beats; the friends beat is its own scene; the tail feels like the
+book; no jank; mobile solid; Lighthouse acceptable; reduced-motion + keyboard paths work.
 
 ## Phase 6 — Inner-page polish & cohesion
 
