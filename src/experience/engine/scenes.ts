@@ -66,14 +66,14 @@ export interface SceneDef {
   /** the closing beat carries a CTA button row */
   cta?: boolean;
   /** override the CTA buttons for this beat (defaults to Get the Book +
-   *  Discover the Chakras); used by the Buy page for real purchase links */
+   *  About Us); used by the Buy page for real purchase links */
   ctaButtons?: SceneCtaButton[];
 }
 
 /** default CTA row for journeys that just set `cta: true` (home/chakras/about) */
 export const DEFAULT_CTA_BUTTONS: SceneCtaButton[] = [
   { label: "Get the Book", href: "/buy", variant: "primary" },
-  { label: "Discover the Chakras", href: "/chakras", variant: "secondary" },
+  { label: "About Us", href: "/about", variant: "secondary" },
 ];
 
 const W = "/scenes/web";
