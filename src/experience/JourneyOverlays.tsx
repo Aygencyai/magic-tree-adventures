@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import type { SceneDef } from "./engine/scenes";
 import { DEFAULT_CTA_BUTTONS } from "./engine/scenes";
+import type { ExperienceIntro } from "./Experience";
 import { journeyProgress, clamp01 } from "./engine/progress";
 import { CHAKRAS } from "@/lib/constants";
 
@@ -40,7 +41,13 @@ function beatOpacity(p: number, c: number, half: number) {
   return 1;
 }
 
-export default function JourneyOverlays({ journey }: { journey: SceneDef[] }) {
+export default function JourneyOverlays({
+  journey,
+  intro,
+}: {
+  journey: SceneDef[];
+  intro?: ExperienceIntro;
+}) {
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -120,7 +127,7 @@ export default function JourneyOverlays({ journey }: { journey: SceneDef[] }) {
           style={{ transform: "scaleX(0)" }}
         />
       </div>
-      <ScrollHint />
+      <ScrollHint intro={intro} />
       {journey.map((beat, i) => (
         <div key={beat.id} data-beat={i} className="absolute inset-0" style={{ opacity: 0 }}>
           {beat.sprites && <Cameos sprites={beat.sprites} />}
@@ -226,23 +233,68 @@ function ChakraIgnition() {
   );
 }
 
-/* ── gentle "scroll to begin" hint on the first beat ─────────────────────── */
+/* ── playful "how to begin" coachmark on the first beat ──────────────────────
+ * Teaches the scroll interaction with delight: a warm invitation pill with
+ * twinkling sparkles, a staggered chevron "wave", and (on the homepage) a
+ * friendly character peeking up from the bottom edge. All CSS keyframes — the
+ * global prefers-reduced-motion rule neutralises them; the rAF fades the whole
+ * group out over the first 4% of scroll (and back in at the top). */
 
-function ScrollHint() {
+function ScrollHint({ intro }: { intro?: ExperienceIntro }) {
+  const label = intro?.label ?? "scroll to explore";
   return (
-    <div
-      data-hint
-      className="absolute inset-x-0 bottom-8 flex flex-col items-center gap-1 text-bark-light"
-    >
-      <span className="font-accent text-lg">scroll to begin the journey</span>
-      {/* CSS bob (globals `gentle-bob`); global reduced-motion rule neutralises it */}
-      <span
-        aria-hidden
-        style={{ animation: "gentle-bob 1.8s ease-in-out infinite" }}
-        className="text-2xl leading-none text-gold"
-      >
-        ↓
-      </span>
+    // z-20 so it sits clearly above the beat card; fades out via data-hint
+    <div data-hint className="pointer-events-none absolute inset-0 z-20">
+      {/* friendly character peeking from the bottom edge (homepage) */}
+      {intro?.character && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={intro.character.src}
+          alt=""
+          aria-hidden
+          style={{ animation: "gentle-bob 2.6s ease-in-out infinite" }}
+          className="absolute bottom-0 right-[3vw] w-[clamp(140px,17vw,260px)] translate-y-[18%] drop-shadow-[0_14px_30px_rgba(61,43,31,0.4)] md:right-[5vw]"
+        />
+      )}
+
+      {/* compact single-row invitation pill — stays below the beat card */}
+      <div className="absolute inset-x-0 bottom-6 flex justify-center px-6">
+        <div className="relative">
+          {/* twinkling sparkles */}
+          <span
+            aria-hidden
+            style={{ animation: "twinkle 2.2s ease-in-out infinite" }}
+            className="absolute -left-4 -top-3 text-base text-gold-light"
+          >
+            ✦
+          </span>
+          <span
+            aria-hidden
+            style={{ animation: "twinkle 2.7s ease-in-out 0.5s infinite" }}
+            className="absolute -right-3 -top-2 text-xs text-gold"
+          >
+            ✦
+          </span>
+          <div className="glass-warm flex items-center gap-3 rounded-full py-2.5 pl-7 pr-5 shadow-[0_12px_34px_-14px_rgba(61,43,31,0.5)]">
+            <p className="font-accent text-xl font-bold text-gold-dark md:text-2xl">
+              {label}
+            </p>
+            {/* small chevron wave — kept inline so the pill never clips */}
+            <span className="flex flex-col items-center -space-y-2 text-gold">
+              {[0, 1].map((i) => (
+                <span
+                  key={i}
+                  aria-hidden
+                  style={{ animation: `chevron-wave 1.4s ease-in-out ${i * 0.2}s infinite` }}
+                  className="text-lg leading-none"
+                >
+                  ↓
+                </span>
+              ))}
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

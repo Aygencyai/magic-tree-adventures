@@ -15,7 +15,13 @@ import Newsletter from "@/components/home/Newsletter";
 export default function HomePage() {
   return (
     <>
-      <Experience journey={HOME_JOURNEY} />
+      <Experience
+        journey={HOME_JOURNEY}
+        intro={{
+          label: "scroll to explore",
+          character: { src: "/characters/gino.png", alt: "Gino the lion" },
+        }}
+      />
 
       {/* Conversion tail — opaque, sits above the released sticky canvas */}
       <div id="conversion-tail" className="relative z-20 bg-parchment">

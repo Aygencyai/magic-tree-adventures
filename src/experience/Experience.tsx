@@ -5,6 +5,14 @@ import dynamic from "next/dynamic";
 import StaticJourney from "./StaticJourney";
 import type { SceneDef } from "./engine/scenes";
 
+/** Optional playful "how to begin" coachmark on the first beat (homepage). */
+export interface ExperienceIntro {
+  /** big Caveat invitation; defaults to "scroll to explore" */
+  label?: string;
+  /** a character sprite that peeks + bobs at the bottom edge to invite scrolling */
+  character?: { src: string; alt: string };
+}
+
 // Both layers are client-only: the canvas touches window/document and the
 // overlay's rAF reads window scroll — neither has SSR/SEO value (it's a
 // scroll-driven WebGL experience; the story copy is real DOM either way).
@@ -26,7 +34,13 @@ const TRACK_VH_PER_BEAT = 135;
  *
  * `prefers-reduced-motion` swaps the whole thing for a calm static storybook.
  */
-export default function Experience({ journey }: { journey: SceneDef[] }) {
+export default function Experience({
+  journey,
+  intro,
+}: {
+  journey: SceneDef[];
+  intro?: ExperienceIntro;
+}) {
   const [reduced, setReduced] = useState(false);
   useEffect(() => {
     setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -41,7 +55,7 @@ export default function Experience({ journey }: { journey: SceneDef[] }) {
       <div className="sticky top-0 h-screen overflow-hidden bg-parchment">
         <ExperienceCanvas journey={journey} />
         {/* Beat-synced Fraunces/Caveat copy, chakra ignition, cameos, CTA, progress bar */}
-        <JourneyOverlays journey={journey} />
+        <JourneyOverlays journey={journey} intro={intro} />
       </div>
     </section>
   );

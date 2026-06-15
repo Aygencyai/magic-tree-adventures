@@ -10,5 +10,13 @@ export const metadata: Metadata = {
 
 // Journey-only route (no conversion tail) — handy for ?p= QA + sharing.
 export default function ExperiencePage() {
-  return <Experience journey={HOME_JOURNEY} />;
+  return (
+    <Experience
+      journey={HOME_JOURNEY}
+      intro={{
+        label: "scroll to explore",
+        character: { src: "/characters/gino.png", alt: "Gino the lion" },
+      }}
+    />
+  );
 }

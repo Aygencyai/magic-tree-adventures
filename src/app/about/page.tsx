@@ -213,7 +213,7 @@ export default function AboutPage() {
                       <img
                         src={person.photo}
                         alt={`${person.name}, ${person.role}`}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover object-[center_22%]"
                       />
                     </div>
                     <h3 className="font-heading text-xl font-semibold text-bark">
