@@ -11,3 +11,9 @@ dist/
 # Keep only page-09 (used by the Phase 0 spike); processed plates land elsewhere.
 /public/scenes/raw/*
 !/public/scenes/raw/page-09.png
+
+# Intermediate crops (pre-outpaint / pre-cutout) — regenerable from raw via
+# scripts/crop.mjs. The irreplaceable AI outputs (outpainted + text-cleaned
+# masters, sprites, web textures, video loops) ARE committed.
+/public/scenes/crops/
+/public/characters/raw/

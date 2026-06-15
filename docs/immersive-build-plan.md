@@ -78,7 +78,17 @@ motif across the Angelica beats. **Art pipeline: `docs/higgsfield-asset-plan.md`
 - React reverted to ^19.2.4 (the 19.1 pin was only for the abandoned R3F attempt).
 **Known spike artifacts (fixed in Phase 2):** bloom too hot (sky blows out); luminance-as-depth smears edges; baked-in book text on the plate displaces oddly → use a real depth map + text-free outpainted plate.
 
-## Phase 1 — Art generation (Higgsfield)
+## Phase 1 — Art generation (Higgsfield) ✅ DONE (2026-06-15)
+
+**Shipped:** all 8 scene plates outpainted to 16:9 + text-cleaned (`public/scenes/processed/`);
+6 character sprites (`public/characters/`, transparent PNG; Alina wings lost to bg-removal —
+caveat in `higgsfield-asset-plan.md`); freebies (7 chakra cards, 3 author photos, clean-mountain);
+4 ambient video loops (`public/scenes/video/`); web-optimised `.webp` textures + greyscale
+depth proxies (`public/scenes/web/`); `scripts/crop.mjs` offset-crop tool. Full per-asset
+ledger + learnings in `docs/higgsfield-asset-plan.md` (§Phase 1 COMPLETE). Real Depth-Anything
+maps drop into the engine's `*.depth.webp` slot later with no code change.
+
+<details><summary>Original Phase 1 scope</summary>
 
 **Goal:** Produce the painterly asset library with locked art direction.
 **Scope:**
@@ -91,8 +101,34 @@ motif across the Angelica beats. **Art pipeline: `docs/higgsfield-asset-plan.md`
 **Deliverables:** Consistent asset library, palette-audited.
 **Dependencies:** Phase 0 (so we know the export format the engine needs).
 **Exit:** All scenes share one cohesive painterly look; every asset on-palette; depth maps validated in the test scene.
+</details>
 
-## Phase 2 — The Scene Engine
+## Phase 2 — The Scene Engine ✅ DONE (2026-06-15)
+
+**Shipped:** `src/experience/engine/` — a reusable vanilla-Three engine:
+- `ParallaxScene` — one painterly plate as a **depth-parallax plane**: in-shader UV parallax
+  (near pixels slide opposite far pixels off pointer/scroll), soft vignette, per-scene opacity
+  for crossfades. No scene lighting → nothing blows out under bloom (the spike's emissive
+  approach did). Reads colour `.webp` + greyscale depth proxy.
+- `ParticleField` — instanced firefly/pollen motes, drift in the vertex shader, additive,
+  tinted to the active beat, count scaled by device tier (deterministic spread, no `Math.random`).
+- `Atmosphere` — `EffectComposer` render → gentle `UnrealBloomPass` (high tier only, low
+  strength) → `OutputPass`.
+- `SceneEngine` — owns renderer/camera/Lenis, maps global scroll progress (0→1) across the
+  scene list with linear neighbour crossfade, cover-fits plates (landscape + portrait), runs
+  one rAF loop, disposes cleanly. `?p=0..1` deep-links/freezes progress (QA + sharing).
+- `quality.ts` — device tier + `prefers-reduced-motion` → static crossfades, no bloom/motion.
+- `scenes.ts` — 3-beat arc wired (garden → angelica → flying); extend the array for Phase 3.
+
+**Verified (headless WebGL, swiftshader):** all 3 scenes load + render; scroll crossfades
+between them (screenshots at p=0/0.5/1.0); particles + bloom + vignette present; mobile width
+cover-fits + drops to low tier; `pnpm build` clean, `/experience` = 1.21 kB / 88.7 kB first load
+(Three.js in its own chunk, zero weight on other routes); no console errors.
+
+**Next (Phase 3):** sequence the full 10-beat journey, the golden-door portal shader transition,
+chakra-light ignition, and beat-synced Fraunces/Caveat HTML overlays.
+
+<details><summary>Original Phase 2 scope</summary>
 
 **Goal:** Reusable WebGL scene system.
 **Scope:**
@@ -104,6 +140,7 @@ motif across the Angelica beats. **Art pipeline: `docs/higgsfield-asset-plan.md`
 **Deliverables:** 2–3 scenes rendering + transitioning on scroll.
 **Dependencies:** Phases 0–1.
 **Exit:** 60fps desktop, graceful mobile; scenes swap by scroll progress without jank.
+</details>
 
 ## Phase 3 — The Journey (scroll choreography)
 

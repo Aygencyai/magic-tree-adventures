@@ -128,16 +128,49 @@ Freebies (no AI generation needed): **chakra art** (page-22) for `/chakras`; **a
 - **Net-new only:** particle textures (firefly/sparkle), possibly a cloud layer. Chakra crystals are NOT net-new — the book's chakra art (page-22) covers it.
 
 ## Phase 1 progress & learnings (2026-06-15)
-**Done (uploaded → outpainted 16:9, saved in `public/scenes/processed/`):**
-- `beat4-angelica-reveal-16x9.png` — clean ✅
-- `beat9-flying-home-16x9.png` — great; minor scattered book captions to inpaint ✅
-- `beat7-crystal-mountain-arrival-16x9.png` — ⚠ kept the spread's text columns; **redo via crop-first**
-- `public/scenes/video/beat4-angelica-reveal-loop.mp4` — **animation validated** ✅ (image→video, `grok_video_v15`, start_image = the outpainted hero job_id; drifting clouds + shimmer + butterflies, art preserved; 5s 720p, **22 cr**). Full pipeline proven: book art → outpaint → animate.
 
-**Learnings:**
-- `outpaint_image` is excellent + cheap (~2 cr) and **perfectly preserves Barajas's style** on **panoramic-art spreads** (hero, flying). Confirmed pipeline: `media_upload` (batch via `files[]`) → curl PUT → `media_confirm` → `outpaint_image` (16:9) → `job_status` → download.
-- **Text-heavy spreads need a crop-to-illustration step BEFORE outpaint** (arrival p16; also the half-spread scenes: garden p05-left, glowing tree p07-right, ferry p15-right). `sips` only does centered crops (no offset) → **add a crop tool** (install `sharp`, or a tiny canvas/Node script) as Phase-1 tooling.
-- Then a **text-clean inpaint pass** (`nano_banana_2`) removes residual captions on the kept plates.
-- Workspace: Aygency team (3000 cr); spend so far trivial (6 cr for 3 plates).
+### ✅ Phase 1 COMPLETE (2026-06-15)
+**All 8 scene plates outpainted 16:9 + text-free in `public/scenes/processed/`:**
+- beat1-garden · beat2-glowing-tree · beat4-angelica-reveal · beat6-ferry ·
+  beat7-crystal-mountain-arrival · beat8-cave · beat9-flying-home · beat10-return-garden.
+- beat7 redone via **crop-first** (the prior text-column version is gone).
+- Text-clean inpaint (`nano_banana_2`, 2k) ran on beat4 (hero caption), beat9 (3 captions),
+  beat10 (top block + "The End") — captions removed, Barajas style preserved.
 
-**Remaining queue:** crop+outpaint beats 1,2,6,7,8,10 · text-clean pass · character sprites (`remove_background`) · crop chakra cards (p22) + author photos (p23) + clean mountain (p24) · depth maps (local, Phase 2) · video loops (`generate_video`).
+**Character sprites (transparent PNG) in `public/characters/`:**
+- rory · riley · tilly · otter-joe (clean busts from the p04 portrait grid) ·
+  alina · gino (full-body from p10), all via `remove_background`.
+- ⚠ **Alina lost her soft blue wings** — translucent feathers read as background to the
+  remover (inherent limit). Her full-winged form is preserved in the beat9 flying plate.
+
+**Freebies (no AI) in `public/chakras/` + `public/about/` + `public/scenes/processed/`:**
+- 7 chakra cards (p22) · 3 author photos: Jools Abrams, Sara Oberman Babai, Alejandra Barajas
+  (p23) · clean-mountain motif (p24).
+
+**Ambient video loops (`grok_video_v15`, 5s 720p, ~22cr each) in `public/scenes/video/`:**
+- beat1-garden · beat4-angelica-reveal · beat7-arrival · beat9-flying-home.
+
+**Web textures in `public/scenes/web/`:** each plate → 2048w `.webp` (~200-400KB) +
+smoothed greyscale `.depth.webp` proxy (~12KB) driving the Phase-2 parallax shader.
+
+### Tooling
+- **`scripts/crop.mjs`** (sharp) — offset/half/fractional crops (`sips` only does centred).
+  Usage: `node scripts/crop.mjs <in> <out> --frac <l> <t> <w> <h>` (0-1 or 0-100), or `--half left|right`.
+
+### Learnings
+- `outpaint_image` is excellent + cheap (~2 cr) and **perfectly preserves Barajas's style**.
+  Pipeline: `media_upload` (batch `files[]`) → curl PUT → `media_confirm` → `outpaint_image` (16:9) → `job_status` → download.
+- **Text-heavy + half-spread plates need crop-to-illustration BEFORE outpaint**; the painted
+  *edges* of the crop must be scene (inscribe inside oval vignettes — parchment corners would
+  extend as parchment). `nano_banana_2` then removes any residual captions and **faithfully
+  inpaints painterly sky/grass/water** — verified on 4 plates, zero style drift.
+- `remove_background` is clean on opaque subjects + the solid p04 portrait ovals; it **cannot
+  keep translucent wings/glows** (treats them as background).
+- Total Phase-1 spend trivial (well under 100 cr of the 2971 team balance).
+
+### Depth maps (Phase 2+)
+The shipped depth proxy is a **smoothed greyscale of the colour plate** (sharp: greyscale →
+blur → mild contrast) — not true depth, but a smooth displacement driver that avoids the
+luminance-edge smear the spike hit. The engine reads `*.depth.webp` from a generic slot:
+drop a real **Depth-Anything V2 / MiDaS** map at the same path and the look upgrades with no
+code change.
