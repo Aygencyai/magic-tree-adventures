@@ -36,6 +36,13 @@ export interface SceneSprite {
   alt: string;
 }
 
+export interface SceneCtaButton {
+  label: string;
+  href: string;
+  /** gold pill (primary) or outlined (secondary); defaults to secondary */
+  variant?: "primary" | "secondary";
+}
+
 export interface SceneDef {
   id: string;
   /** full-bleed colour plate (web-optimised webp) */
@@ -56,9 +63,18 @@ export interface SceneDef {
   chakraIgnite?: boolean;
   /** character cameos that drift in on this beat */
   sprites?: SceneSprite[];
-  /** the closing beat carries the buy CTA */
+  /** the closing beat carries a CTA button row */
   cta?: boolean;
+  /** override the CTA buttons for this beat (defaults to Get the Book +
+   *  Discover the Chakras); used by the Buy page for real purchase links */
+  ctaButtons?: SceneCtaButton[];
 }
+
+/** default CTA row for journeys that just set `cta: true` (home/chakras/about) */
+export const DEFAULT_CTA_BUTTONS: SceneCtaButton[] = [
+  { label: "Get the Book", href: "/buy", variant: "primary" },
+  { label: "Discover the Chakras", href: "/chakras", variant: "secondary" },
+];
 
 const W = "/scenes/web";
 
@@ -374,6 +390,77 @@ export const ABOUT_JOURNEY: SceneDef[] = [
       line: "Sixty years of bedtime stories, now a book — so every child, everywhere, can find their own.",
     },
     cta: true,
+  },
+];
+
+/**
+ * The Buy experience (Phase 6.3) — the book sold as a short, warm scroll: the
+ * hero (the Crystal Mountain, the book's destination) → what's inside (Angelica
+ * + the chakras) → a five-star review → a "get your copy" close whose CTA jumps
+ * to the crawlable purchase panel in the tail. Like Chakras/About it reuses the
+ * home-journey plates (mountain / Angelica / flying / return garden), so no new
+ * art. Unlike them, **conversion stays front-and-centre**: the close beat's CTA
+ * is a real purchase button (→ `#buy`), and the page tail SSRs the full,
+ * prominent buy panel (cover, format, retailer links) — the experience frames
+ * the buy action, it never buries it.
+ */
+export const BUY_JOURNEY: SceneDef[] = [
+  {
+    id: "buy-hero",
+    image: `${W}/beat7-crystal-mountain-arrival-16x9.webp`,
+    depth: `${W}/beat7-crystal-mountain-arrival-16x9.depth.webp`,
+    depthStrength: 0.05,
+    tint: 0xffe6f2,
+    motes: 1.3,
+    overlay: {
+      kicker: "Book One",
+      title: "Journey to the Crystal Mountain",
+      line: "A magical story about finding your voice, discovering your inner light, and the adventure of a lifetime.",
+    },
+  },
+  {
+    id: "buy-inside",
+    image: `${W}/beat4-angelica-reveal-16x9.webp`,
+    depth: `${W}/beat4-angelica-reveal-16x9.depth.webp`,
+    depthStrength: 0.045,
+    tint: 0xf6c8d6,
+    motes: 1.2,
+    overlay: {
+      kicker: "What's inside",
+      title: "A Whole World to Explore",
+      line: "Step through the golden door into Angelica — and meet the seven chakras, woven gently through every page.",
+    },
+  },
+  {
+    id: "buy-loved",
+    image: `${W}/beat9-flying-home-16x9.webp`,
+    depth: `${W}/beat9-flying-home-16x9.depth.webp`,
+    depthStrength: 0.04,
+    tint: 0xd0c0ec,
+    motes: 1.1,
+    overlay: {
+      kicker: "★★★★★  Parents & teachers",
+      title: "Loved at Bedtime",
+      line: "“My daughter asked me to read it three times in a row. She wants to find the Crystal Mountain herself now.”",
+    },
+  },
+  {
+    id: "buy-cta",
+    image: `${W}/beat10-return-garden-16x9.webp`,
+    depth: `${W}/beat10-return-garden-16x9.depth.webp`,
+    depthStrength: 0.035,
+    tint: 0xffe0a0,
+    motes: 1,
+    overlay: {
+      kicker: "Bring the magic home",
+      title: "Get Your Copy",
+      line: "Ages 4–10 · 48 pages · full colour hardcover. Available now from Amazon, Waterstones, and your local bookshop.",
+    },
+    cta: true,
+    ctaButtons: [
+      { label: "Get Your Copy", href: "#buy", variant: "primary" },
+      { label: "Read the Story", href: "/about", variant: "secondary" },
+    ],
   },
 ];
 

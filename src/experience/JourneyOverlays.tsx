@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import type { SceneDef } from "./engine/scenes";
+import { DEFAULT_CTA_BUTTONS } from "./engine/scenes";
 import { journeyProgress, clamp01 } from "./engine/progress";
 import { CHAKRAS } from "@/lib/constants";
 
@@ -137,18 +138,19 @@ export default function JourneyOverlays({ journey }: { journey: SceneDef[] }) {
 
               {beat.cta && (
                 <div className="pointer-events-auto mt-6 flex flex-wrap items-center justify-center gap-3">
-                  <Link
-                    href="/buy"
-                    className="rounded-full bg-gold px-8 py-3.5 font-sans text-sm font-bold uppercase tracking-[0.1em] text-parchment transition-colors hover:bg-gold-dark"
-                  >
-                    Get the Book
-                  </Link>
-                  <Link
-                    href="/chakras"
-                    className="rounded-full border-2 border-gold/40 px-8 py-3.5 font-sans text-sm font-bold uppercase tracking-[0.1em] text-gold transition-colors hover:border-gold hover:bg-gold/[0.05]"
-                  >
-                    Discover the Chakras
-                  </Link>
+                  {(beat.ctaButtons ?? DEFAULT_CTA_BUTTONS).map((b) => (
+                    <Link
+                      key={b.label}
+                      href={b.href}
+                      className={
+                        b.variant === "primary"
+                          ? "rounded-full bg-gold px-8 py-3.5 font-sans text-sm font-bold uppercase tracking-[0.1em] text-parchment transition-colors hover:bg-gold-dark"
+                          : "rounded-full border-2 border-gold/40 px-8 py-3.5 font-sans text-sm font-bold uppercase tracking-[0.1em] text-gold transition-colors hover:border-gold hover:bg-gold/[0.05]"
+                      }
+                    >
+                      {b.label}
+                    </Link>
+                  ))}
                 </div>
               )}
             </div>

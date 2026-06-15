@@ -5,6 +5,8 @@ import Reveal from "@/components/ui/Reveal";
 import Button from "@/components/ui/Button";
 import Reviews from "@/components/home/Reviews";
 import Newsletter from "@/components/home/Newsletter";
+import Experience from "@/experience/Experience";
+import { BUY_JOURNEY } from "@/experience/engine/scenes";
 import { CHAKRAS } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -166,11 +168,27 @@ const GIFT_IDEAS = [
   },
 ];
 
+/**
+ * The Buy experience (Phase 6.3) — the immersive scroll journey frames the book
+ * (hero → what's inside → review → "get your copy"), then releases into the
+ * crawlable conversion tail. Per §6.3 the purchase action stays front-and-centre
+ * and crawlable: the journey's close CTA jumps to `#buy`, and the buy panel
+ * (cover, format, retailer links) is real SSR'd DOM — the experience frames the
+ * buy action, it never buries it. Same engine as /, /chakras, /about.
+ */
 export default function BuyPage() {
   return (
     <>
-      {/* Book Hero */}
-      <section className="pt-32 pb-16 md:pt-40 md:pb-24 bg-gradient-to-b from-gold/[0.06] to-parchment">
+      <Experience journey={BUY_JOURNEY} />
+
+      {/* Grounded conversion tail — opaque, above the released sticky canvas.
+          Real, prominent, crawlable purchase surface (SEO + reduced-motion). */}
+      <div id="conversion-tail" className="relative z-20 bg-parchment">
+        {/* Buy panel — the actual purchase action, anchored for the journey CTA */}
+        <section
+          id="buy"
+          className="scroll-mt-24 section-padding bg-gradient-to-b from-gold/[0.06] to-parchment"
+        >
         <div className="max-w-5xl mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center gap-12">
             {/* Book cover placeholder */}
@@ -330,8 +348,9 @@ export default function BuyPage() {
         </div>
       </SectionContainer>
 
-      {/* Newsletter */}
-      <Newsletter />
+        {/* Newsletter */}
+        <Newsletter />
+      </div>
     </>
   );
 }
