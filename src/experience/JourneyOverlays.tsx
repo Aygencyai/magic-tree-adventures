@@ -144,10 +144,10 @@ export default function JourneyOverlays({ journey }: { journey: SceneDef[] }) {
                     Get the Book
                   </Link>
                   <Link
-                    href="/story"
+                    href="/chakras"
                     className="rounded-full border-2 border-gold/40 px-8 py-3.5 font-sans text-sm font-bold uppercase tracking-[0.1em] text-gold transition-colors hover:border-gold hover:bg-gold/[0.05]"
                   >
-                    Explore the Story
+                    Discover the Chakras
                   </Link>
                 </div>
               )}

@@ -103,7 +103,7 @@ export default function Hero() {
           className="mt-10 flex flex-col sm:flex-row gap-4 justify-center"
         >
           <MagneticButton>
-            <Button href="/story">Explore the Story</Button>
+            <Button href="/">Enter the Journey</Button>
           </MagneticButton>
           <MagneticButton>
             <Button href="/buy" variant="secondary">

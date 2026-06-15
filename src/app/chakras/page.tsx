@@ -109,8 +109,8 @@ export default function ChakrasPage() {
           <Reveal delay={0.3}>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button href="/buy">Buy the Book</Button>
-              <Button href="/story" variant="secondary">
-                Read the Story
+              <Button href="/" variant="secondary">
+                Enter the Journey
               </Button>
             </div>
           </Reveal>

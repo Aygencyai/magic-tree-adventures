@@ -21,10 +21,10 @@ export default function NotFound() {
             Back to Home
           </Link>
           <Link
-            href="/story"
+            href="/chakras"
             className="inline-flex items-center justify-center font-sans font-bold text-sm uppercase tracking-[0.1em] rounded-full px-8 py-3.5 transition-all duration-200 active:scale-[0.97] border-2 border-gold/40 bg-transparent text-gold hover:border-gold hover:bg-gold/[0.05]"
           >
-            Explore the Story
+            Explore the Chakras
           </Link>
         </div>
       </div>

@@ -4,7 +4,6 @@ export const SITE_DESCRIPTION =
   "A magical story about finding your voice, discovering your inner light, and the adventure of a lifetime.";
 
 export const NAV_LINKS = [
-  { label: "The Story", href: "/story" },
   { label: "The Chakras", href: "/chakras" },
   { label: "About", href: "/about" },
 ] as const;
