@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { JOURNEY } from "./engine/scenes";
+import { journeyProgress, clamp01 } from "./engine/progress";
 import { CHAKRAS } from "@/lib/constants";
 
 /**
@@ -28,7 +29,6 @@ const CENTER = (i: number) => (N > 1 ? i / (N - 1) : 0);
 const HALF = N > 1 ? 1 / (N - 1) / 2 : 0.5;
 const ARRIVAL = JOURNEY.findIndex((b) => b.chakraIgnite);
 
-const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
 const invlerp = (a: number, b: number, x: number) => (a === b ? 0 : clamp01((x - a) / (b - a)));
 const smooth = (x: number) => x * x * (3 - 2 * x);
 
@@ -64,11 +64,11 @@ export default function JourneyOverlays() {
     const orbEls = Array.from(root.querySelectorAll<HTMLElement>("[data-orb]"));
     const labelEls = Array.from(root.querySelectorAll<HTMLElement>("[data-label]"));
     const hintEl = root.querySelector<HTMLElement>("[data-hint]");
+    const barEl = root.querySelector<HTMLElement>("[data-progress]");
 
     let raf = 0;
     const tick = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      const p = forced !== null ? forced : max > 0 ? clamp01(window.scrollY / max) : 0;
+      const p = journeyProgress(forced);
 
       for (const el of beatEls) {
         const i = Number(el.dataset.beat);
@@ -100,6 +100,7 @@ export default function JourneyOverlays() {
       }
 
       if (hintEl) hintEl.style.opacity = String(1 - invlerp(0, 0.04, p));
+      if (barEl) barEl.style.transform = `scaleX(${p})`;
 
       raf = requestAnimationFrame(tick);
     };
@@ -108,7 +109,15 @@ export default function JourneyOverlays() {
   }, []);
 
   return (
-    <div ref={rootRef} className="pointer-events-none fixed inset-0 z-10 overflow-hidden">
+    <div ref={rootRef} className="pointer-events-none absolute inset-0 z-10 overflow-hidden">
+      {/* slim journey progress bar (top edge, grows left→right) */}
+      <div className="absolute inset-x-0 top-0 h-[3px] bg-bark/5">
+        <div
+          data-progress
+          className="h-full origin-left bg-gradient-to-r from-gold-light via-gold to-gold-dark"
+          style={{ transform: "scaleX(0)" }}
+        />
+      </div>
       <ScrollHint />
       {JOURNEY.map((beat, i) => (
         <div key={beat.id} data-beat={i} className="absolute inset-0" style={{ opacity: 0 }}>

@@ -5,6 +5,7 @@ import { ParticleField } from "./ParticleField";
 import { Atmosphere } from "./Atmosphere";
 import { Portal } from "./Portal";
 import { detectQuality, type QualitySettings } from "./quality";
+import { journeyProgress } from "./progress";
 import { JOURNEY, PLATE_ASPECT, type SceneDef } from "./scenes";
 
 const FOV = 45;
@@ -79,11 +80,9 @@ export class SceneEngine {
       : null;
     if (this.forcedProgress !== null) this.progress = this.forcedProgress;
 
+    // Lenis smooths the actual page scroll; progress is read each frame from
+    // the journey track (see ./progress), so engine + HTML overlays stay locked.
     this.lenis = new Lenis();
-    this.lenis.on("scroll", (e: { scroll: number; limit: number }) => {
-      if (this.forcedProgress !== null) return;
-      this.progress = e.limit > 0 ? e.scroll / e.limit : 0;
-    });
 
     this.onResize = this.onResize.bind(this);
     this.onPointerMove = this.onPointerMove.bind(this);
@@ -164,6 +163,7 @@ export class SceneEngine {
     if (this.disposed) return;
     const t = timeMs * 0.001;
     this.lenis.raf(timeMs);
+    this.progress = journeyProgress(this.forcedProgress);
 
     if (!this.quality.reducedMotion) {
       // ease pointer for buttery parallax

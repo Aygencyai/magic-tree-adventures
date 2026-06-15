@@ -13,11 +13,26 @@ export default function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY >= 50);
+    // Over an immersive journey track (homepage / experience) the nav stays
+    // transparent across the whole journey and flips to the solid glass bar only
+    // as the conversion tail begins. Elsewhere it flips early (scrollY >= 50).
+    const onScroll = () => {
+      const track = document.querySelector<HTMLElement>("[data-journey-track]");
+      if (track) {
+        const flip = track.offsetTop + track.offsetHeight - window.innerHeight * 1.2;
+        setScrolled(window.scrollY >= flip);
+      } else {
+        setScrolled(window.scrollY >= 50);
+      }
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [pathname]);
 
   useEffect(() => {
     setMobileOpen(false);

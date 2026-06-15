@@ -194,17 +194,48 @@ Caveat) per scene.
 **Exit:** Every beat lands; portal + chakra moments feel "wow"; copy is real, not lorem.
 </details>
 
-## Phase 4 — Overlay UI, content & CTAs
+## Phase 4 — Overlay UI, content & CTAs ✅ DONE (2026-06-15)
+
+**Decisions (Louis):** homepage = **journey + conversion tail** (the 9-beat journey, then
+Reviews + Newsletter scroll up to close); nav = **transparent over the journey, solid on the tail**.
+
+**Shipped:**
+- **Homepage swap** — `/` now renders the journey then the conversion tail (`Reviews` +
+  `Newsletter`, opaque `z-20` block). The previous storybook homepage is retired (in git
+  history; its content lives on the inner pages). `/experience` stays as a journey-only route
+  (handy for `?p=` QA/sharing).
+- **Sticky scrollytelling architecture** — `ExperienceMount` is now a tall
+  `[data-journey-track]` section whose sticky `h-screen` child pins the canvas + overlays while
+  you scroll the journey, then releases so the tail scrolls up over it naturally (no z-index/
+  hide hacks). Canvas + overlays moved from `fixed` → `absolute` inside the sticky wrapper.
+- **Progress bound to the track** (`engine/progress.ts` → `journeyProgress()`) — engine + HTML
+  overlays both read it, so the journey maps to the track and not the whole document (which now
+  includes the tail). Engine reads it each rAF frame (Lenis still smooths the scroll).
+- **Nav adapts** — transparent across the whole journey track, flips to the solid glass-warm
+  bar as the tail enters; non-journey pages (and the reduced-motion static page) keep the
+  `scrollY ≥ 50` rule. Re-binds on route change + resize.
+- **Slim progress indicator** — a gold gradient bar at the top edge, `scaleX` = journey progress.
+- **Reduced-motion fallback** — `StaticJourney`: `prefers-reduced-motion` swaps the whole WebGL
+  journey for a calm vertical storybook (each plate + its Fraunces/Caveat copy, the CTA on the
+  closing beat). No canvas, no scroll-scrubbing, no autonomous motion.
+
+**Verified (headless WebGL, swiftshader):** `pnpm build` clean; `/` = 3 kB / 187 kB,
+`/experience` = 3 kB / 99.2 kB; homepage journey full-bleed under the transparent nav; `?p=`
+deep-link drives the homepage journey (chakra beat confirmed); conversion tail (Reviews +
+Newsletter) server-rendered after the track; reduced-motion static storybook renders; mobile
+(375) hero clean; **zero console errors.**
+
+**Deferred:** keyboard-nav affordance for the journey (you can scroll/tab to CTAs; an explicit
+"skip the journey" link could help a11y — fold into Phase 5). Homepage `<title>`/OG still the
+layout default — confirm in Phase 5 SEO pass.
+
+<details><summary>Original Phase 4 scope</summary>
 
 **Goal:** Production homepage around the experience.
-**Scope:**
-- Nav adapts over canvas (transparent → solid on scroll-out).
-- Scroll hint + slim progress indicator.
-- Buy / newsletter CTAs woven into the Home-again beat; clean handoff links to inner pages.
-- `prefers-reduced-motion` → static illustrated fallback of the journey.
-**Deliverables:** Complete, content-accurate, accessible homepage.
-**Dependencies:** Phase 3.
+**Scope:** Nav adapts over canvas · scroll hint + slim progress indicator · Buy/newsletter CTAs
+woven into the Home-again beat + handoff links · `prefers-reduced-motion` static fallback.
 **Exit:** Real content; keyboard + reduced-motion paths work; nav/CTAs correct.
+</details>
 
 ## Phase 5 — Performance, responsive, a11y, SEO
 
