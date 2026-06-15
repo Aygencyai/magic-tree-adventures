@@ -124,8 +124,8 @@ export const HOME_JOURNEY: SceneDef[] = [
   },
   {
     id: "friends",
-    image: `${W}/beat4-angelica-reveal-16x9.webp`,
-    depth: `${W}/beat4-angelica-reveal-16x9.depth.webp`,
+    image: `${W}/friends-alina-gino-16x9.webp`,
+    depth: `${W}/friends-alina-gino-16x9.depth.webp`,
     depthStrength: 0.045,
     tint: 0xbcd6f4,
     motes: 1.1,
@@ -134,10 +134,6 @@ export const HOME_JOURNEY: SceneDef[] = [
       title: "Alina & Gino",
       line: "An angel with wings of softest blue, and a gentle lion who longed to be understood.",
     },
-    sprites: [
-      { src: "/characters/alina.png", side: "left", alt: "Alina, the angel of voices" },
-      { src: "/characters/gino.png", side: "right", alt: "Gino, the gentle lion" },
-    ],
   },
   {
     id: "ferry",
