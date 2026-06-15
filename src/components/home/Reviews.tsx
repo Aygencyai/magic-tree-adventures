@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { staggerContainer } from "@/lib/animations";
 import Reveal from "@/components/ui/Reveal";
-import SectionContainer from "@/components/ui/SectionContainer";
+import PainterlyBand from "@/components/tail/PainterlyBand";
 import SectionHeading from "@/components/ui/SectionHeading";
 
 const REVIEWS = [
@@ -63,7 +63,7 @@ function StarRating({ count }: { count: number }) {
 
 export default function Reviews() {
   return (
-    <SectionContainer>
+    <PainterlyBand image="/scenes/web/beat10-return-garden-16x9.webp" particles>
       <SectionHeading
         title="What Families Are Saying"
         subtitle="Stories from readers who stepped through the golden door"
@@ -77,12 +77,12 @@ export default function Reviews() {
       >
         {REVIEWS.map((review, i) => (
           <Reveal key={review.author} delay={i * 0.1}>
-            <div className="bg-parchment-dark rounded-2xl p-6 md:p-8 h-full flex flex-col">
+            <div className="glass-warm rounded-2xl p-6 md:p-8 h-full flex flex-col shadow-[0_20px_50px_-28px_rgba(61,43,31,0.5)] transition-transform duration-300 hover:-translate-y-1">
               <StarRating count={review.stars} />
               <blockquote className="mt-4 text-bark-light text-sm md:text-base leading-relaxed flex-1 italic">
                 &ldquo;{review.quote}&rdquo;
               </blockquote>
-              <div className="mt-4 pt-4 border-t border-gold/[0.08]">
+              <div className="mt-4 pt-4 border-t border-gold/20">
                 <p className="font-heading text-sm font-semibold text-bark">
                   {review.author}
                 </p>
@@ -94,6 +94,6 @@ export default function Reviews() {
           </Reveal>
         ))}
       </motion.div>
-    </SectionContainer>
+    </PainterlyBand>
   );
 }

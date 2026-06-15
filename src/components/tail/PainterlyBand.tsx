@@ -24,6 +24,8 @@ interface PainterlyBandProps {
   tone?: "warm" | "dark";
   /** ambient drifting motes for extra life */
   particles?: boolean;
+  /** anchor id on the section (e.g. "buy" for the Buy panel) */
+  id?: string;
   className?: string;
   /** classes for the inner content container (defaults to centred max-w-5xl) */
   innerClassName?: string;
@@ -34,13 +36,17 @@ export default function PainterlyBand({
   image,
   tone = "warm",
   particles = false,
+  id,
   className,
   innerClassName,
   children,
 }: PainterlyBandProps) {
   const dark = tone === "dark";
   return (
-    <section className={cn("relative overflow-hidden section-padding", className)}>
+    <section
+      id={id}
+      className={cn("relative overflow-hidden section-padding", className)}
+    >
       {image && (
         <div aria-hidden className="absolute inset-0">
           {/* plate is over-sized so the slow parallax never reveals an edge */}

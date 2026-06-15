@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { motion, AnimatePresence } from "framer-motion";
 import Reveal from "@/components/ui/Reveal";
-import SectionContainer from "@/components/ui/SectionContainer";
+import PainterlyBand from "@/components/tail/PainterlyBand";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Button from "@/components/ui/Button";
 
@@ -59,7 +59,12 @@ export default function Newsletter() {
   };
 
   return (
-    <SectionContainer dark>
+    <PainterlyBand
+      image="/scenes/web/beat9-flying-home-16x9.webp"
+      tone="dark"
+      particles
+      className="text-parchment"
+    >
       <SectionHeading
         title="Join the Adventure"
         subtitle="Be the first to know when Book Two arrives"
@@ -181,6 +186,6 @@ export default function Newsletter() {
           </AnimatePresence>
         </div>
       </Reveal>
-    </SectionContainer>
+    </PainterlyBand>
   );
 }

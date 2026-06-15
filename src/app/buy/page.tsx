@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import SectionContainer from "@/components/ui/SectionContainer";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Reveal from "@/components/ui/Reveal";
 import Button from "@/components/ui/Button";
 import Reviews from "@/components/home/Reviews";
 import Newsletter from "@/components/home/Newsletter";
 import Experience from "@/experience/Experience";
+import PainterlyBand from "@/components/tail/PainterlyBand";
 import { BUY_JOURNEY } from "@/experience/engine/scenes";
 import { CHAKRAS } from "@/lib/constants";
 
@@ -185,41 +185,65 @@ export default function BuyPage() {
           Real, prominent, crawlable purchase surface (SEO + reduced-motion). */}
       <div id="conversion-tail" className="relative z-20 bg-parchment">
         {/* Buy panel — the actual purchase action, anchored for the journey CTA */}
-        <section
+        <PainterlyBand
           id="buy"
-          className="scroll-mt-24 section-padding bg-gradient-to-b from-gold/[0.06] to-parchment"
+          image="/scenes/web/beat7-crystal-mountain-arrival-16x9.webp"
+          particles
+          className="scroll-mt-24"
+          innerClassName="max-w-5xl"
         >
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center gap-12">
-            {/* Book cover placeholder */}
+          <div className="flex flex-col md:flex-row items-center gap-10 md:gap-12 glass-warm rounded-3xl p-8 md:p-10 shadow-[0_34px_80px_-34px_rgba(61,43,31,0.6)]">
+            {/* Designed cover title-treatment (a stylised mark — not the real cover) */}
             <Reveal className="shrink-0">
               <div className="relative">
-                <div className="w-64 h-80 md:w-80 md:h-[26rem] rounded-2xl bg-parchment-dark shadow-card-hover flex flex-col items-center justify-center overflow-hidden">
-                  {/* Decorative cover elements */}
-                  <div className="absolute inset-0 bg-gradient-to-b from-gold/[0.06] to-transparent" />
-                  <div className="relative text-center px-6">
-                    <p className="font-accent text-gold text-sm mb-2">
+                <div className="relative w-60 h-80 md:w-72 md:h-[24rem] rounded-2xl overflow-hidden shadow-[0_24px_60px_-22px_rgba(61,43,31,0.6)] ring-1 ring-gold/30">
+                  {/* warm painterly cover field */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-forest via-forest-dark to-[#14301f]" />
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_28%,rgba(232,199,120,0.45),transparent_60%)]" />
+                  {/* crystal-mountain motif */}
+                  <svg
+                    viewBox="0 0 120 90"
+                    aria-hidden
+                    className="absolute left-1/2 top-[34%] w-36 -translate-x-1/2 -translate-y-1/2 text-gold-light/90"
+                  >
+                    <path
+                      d="M10 78 L38 30 L52 50 L60 18 L74 46 L86 26 L110 78 Z"
+                      fill="currentColor"
+                      fillOpacity="0.9"
+                    />
+                    <path d="M60 18 L74 46 L52 50 Z" fill="#fff" fillOpacity="0.5" />
+                  </svg>
+                  {/* inner gold frame */}
+                  <div className="absolute inset-3 rounded-xl border border-gold/35" />
+                  {/* type */}
+                  <div className="absolute inset-x-0 top-7 text-center px-6">
+                    <p className="font-accent text-gold-light text-sm">
                       The Magic Tree Adventures
                     </p>
-                    <p className="font-heading text-xl md:text-2xl font-bold text-bark leading-tight">
+                  </div>
+                  <div className="absolute inset-x-0 bottom-9 text-center px-6">
+                    <p className="font-heading text-xl md:text-2xl font-bold text-parchment leading-tight drop-shadow-[0_2px_8px_rgba(20,48,31,0.8)]">
                       Journey to the Crystal Mountain
                     </p>
-                    <div className="flex justify-center gap-1 mt-4">
+                    <div className="flex justify-center gap-1.5 mt-3">
                       {CHAKRAS.map((c) => (
                         <div
                           key={c.name}
                           className="w-1.5 h-1.5 rounded-full"
-                          style={{ backgroundColor: c.colour }}
+                          style={{
+                            backgroundColor: c.colour,
+                            boxShadow: `0 0 6px 1px ${c.colour}`,
+                          }}
                         />
                       ))}
                     </div>
-                    <p className="text-bark-muted text-xs mt-6">
-                      Book cover image
-                    </p>
                   </div>
+                  <p className="absolute inset-x-0 bottom-3.5 text-center font-sans text-[0.6rem] uppercase tracking-[0.2em] text-parchment/60">
+                    Book One
+                  </p>
                 </div>
                 {/* Shadow underneath */}
-                <div className="absolute -bottom-4 left-4 right-4 h-8 bg-bark/[0.06] rounded-full blur-xl" />
+                <div className="absolute -bottom-4 left-4 right-4 h-8 bg-bark/15 rounded-full blur-xl" />
               </div>
             </Reveal>
 
@@ -274,69 +298,68 @@ export default function BuyPage() {
               </Reveal>
             </div>
           </div>
-        </div>
-      </section>
+        </PainterlyBand>
 
-      {/* What's Inside */}
-      <SectionContainer className="bg-parchment-dark">
-        <SectionHeading title="What&rsquo;s Inside" />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-          {FEATURES.map((item, i) => (
-            <Reveal key={item.label} delay={i * 0.1}>
-              <div className="bg-parchment rounded-2xl p-6 text-center shadow-card hover:shadow-card-hover transition-shadow duration-300 h-full">
-                <div className="flex justify-center mb-3">{item.icon}</div>
-                <p className="text-sm text-bark font-semibold">
-                  {item.label}
-                </p>
-                <p className="text-xs text-bark-muted mt-1.5 leading-relaxed">
-                  {item.description}
-                </p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </SectionContainer>
-
-      {/* Reviews */}
-      <Reviews />
-
-      {/* Perfect Gift */}
-      <SectionContainer className="bg-parchment-dark">
-        <SectionHeading
-          title="The Perfect Gift"
-          subtitle="For every child who deserves to feel heard"
-        />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          {GIFT_IDEAS.map((item, i) => (
-            <Reveal key={item.title} delay={i * 0.1}>
-              <div className="bg-parchment rounded-2xl p-6 shadow-card h-full">
-                <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center mb-4">
-                  {item.icon}
+        {/* What's Inside */}
+        <PainterlyBand image="/scenes/web/beat4-angelica-reveal-16x9.webp">
+          <SectionHeading title="What&rsquo;s Inside" />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            {FEATURES.map((item, i) => (
+              <Reveal key={item.label} delay={i * 0.1}>
+                <div className="glass-warm rounded-2xl p-6 text-center shadow-[0_18px_44px_-26px_rgba(61,43,31,0.5)] transition-transform duration-300 hover:-translate-y-1 h-full">
+                  <div className="flex justify-center mb-3">{item.icon}</div>
+                  <p className="text-sm text-bark font-semibold">
+                    {item.label}
+                  </p>
+                  <p className="text-xs text-bark-muted mt-1.5 leading-relaxed">
+                    {item.description}
+                  </p>
                 </div>
-                <h3 className="font-heading text-lg font-semibold text-bark">
-                  {item.title}
-                </h3>
-                <p className="text-bark-light text-sm mt-2 leading-relaxed">
-                  {item.description}
-                </p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </SectionContainer>
+              </Reveal>
+            ))}
+          </div>
+        </PainterlyBand>
 
-      {/* Quote */}
-      <SectionContainer>
-        <div className="max-w-3xl mx-auto text-center">
+        {/* Reviews */}
+        <Reviews />
+
+        {/* Perfect Gift */}
+        <PainterlyBand image="/scenes/web/beat1-garden-16x9.webp" particles>
+          <SectionHeading
+            title="The Perfect Gift"
+            subtitle="For every child who deserves to feel heard"
+          />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            {GIFT_IDEAS.map((item, i) => (
+              <Reveal key={item.title} delay={i * 0.1}>
+                <div className="glass-warm rounded-2xl p-6 shadow-[0_18px_44px_-26px_rgba(61,43,31,0.5)] transition-transform duration-300 hover:-translate-y-1 h-full">
+                  <div className="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center mb-4">
+                    {item.icon}
+                  </div>
+                  <h3 className="font-heading text-lg font-semibold text-bark">
+                    {item.title}
+                  </h3>
+                  <p className="text-bark-light text-sm mt-2 leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </PainterlyBand>
+
+        {/* Quote */}
+        <PainterlyBand
+          image="/scenes/web/beat2-glowing-tree-16x9.webp"
+          innerClassName="max-w-3xl text-center"
+        >
           <Reveal>
-            <blockquote className="font-accent text-2xl md:text-3xl text-gold leading-relaxed">
+            <blockquote className="font-accent text-2xl md:text-3xl text-gold-dark leading-relaxed">
               &ldquo;Every child has a voice. Some voices are loud, like a
               lion&rsquo;s roar. Some are quiet, like a whisper on the wind. But
               every single one matters.&rdquo;
             </blockquote>
-            <p className="text-bark-muted text-sm mt-4">
-              &mdash; Poppa Stan
-            </p>
+            <p className="text-bark-muted text-sm mt-4">&mdash; Poppa Stan</p>
           </Reveal>
           <Reveal delay={0.2}>
             <div className="mt-8">
@@ -345,8 +368,7 @@ export default function BuyPage() {
               </Button>
             </div>
           </Reveal>
-        </div>
-      </SectionContainer>
+        </PainterlyBand>
 
         {/* Newsletter */}
         <Newsletter />

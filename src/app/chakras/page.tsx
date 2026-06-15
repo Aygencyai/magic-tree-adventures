@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Reveal from "@/components/ui/Reveal";
 import Button from "@/components/ui/Button";
 import Experience from "@/experience/Experience";
+import PainterlyBand from "@/components/tail/PainterlyBand";
 import { CHAKRAS_JOURNEY } from "@/experience/engine/scenes";
 import { CHAKRAS } from "@/lib/constants";
 
@@ -26,8 +27,11 @@ export default function ChakrasPage() {
       {/* Grounded tail — opaque, sits above the released sticky canvas. Real DOM
           copy for crawlers + the conversion close. */}
       <div id="conversion-tail" className="relative z-20 bg-parchment">
-        <section className="section-padding bg-gradient-to-b from-parchment to-parchment-dark">
-          <div className="max-w-4xl mx-auto px-6 lg:px-12 text-center">
+        <PainterlyBand
+          image="/scenes/web/chakra-intro-16x9.webp"
+          particles
+          innerClassName="max-w-4xl text-center"
+        >
             <Reveal>
               {/* Full rainbow bar — the seven chakra colours */}
               <div className="flex justify-center gap-1.5 mb-10">
@@ -93,8 +97,7 @@ export default function ChakrasPage() {
                 </Button>
               </div>
             </Reveal>
-          </div>
-        </section>
+        </PainterlyBand>
       </div>
     </>
   );
