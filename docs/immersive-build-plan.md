@@ -191,6 +191,30 @@ chakra-light ignition, and beat-synced Fraunces/Caveat HTML overlays.
 
 ---
 
+## Open loose ends — revisit before launch (logged 2026-06-15, end of Phase 2)
+
+Carried forward from the Phase 1–2 session. Re-check each at the end; several may
+fold into a later phase or turn out unnecessary.
+
+- [ ] **Alina sprite has no wings.** `remove_background` stripped her translucent blue
+  feathers (read as background). Her winged form survives inside the beat9 flying plate.
+  *Decide:* leave wingless (she only needs to appear winged in-scene), or remake the
+  standalone sprite via manual mask / fresh gen. Only matters if a winged Alina sprite is
+  needed as an overlay element in Phase 3/6.
+- [ ] **Depth maps are smoothed-greyscale proxies, not true depth.** Parallax is gentle +
+  correct but flat. *Optional upgrade:* run Depth-Anything V2 / MiDaS locally per plate →
+  drop into the engine's `public/scenes/web/*.depth.webp` slot (no code change). Decide if
+  the extra pop is worth it after the full journey is wired (Phase 3) and judged on real GPU.
+- [ ] **The experience is still the standalone `/experience` route**, not the homepage. It
+  folds into `/` during Phase 3–4 (journey + overlay UI). Confirm the homepage swap when
+  Phase 4 lands; keep `/` as the storybook page until then.
+- [ ] **Inner pages don't yet use the Phase 1 generated art.** Sprites, 7 chakra cards,
+  3 author photos, clean-mountain motif are generated + on-palette but unused. Wiring is
+  Phase 6 scope (Story/Chakras/About) — verify nothing's orphaned at the end.
+- [ ] **Rights check before publishing AI-extended Barajas art.** AI-outpainting/animating a
+  named illustrator's commissioned work should be confirmed in-scope with the client/publisher.
+  Not a build blocker — a launch gate. (Also noted in `higgsfield-asset-plan.md`.)
+
 ## Execution rules
 
 - One phase per session; `pnpm build` + verify at each phase end; commit `feat: magic-tree Phase N — …`; `/wrap` then `/clear`/`/compact` between phases.
