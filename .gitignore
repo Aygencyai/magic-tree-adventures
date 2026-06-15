@@ -18,5 +18,9 @@ dist/
 /public/scenes/crops/
 /public/characters/raw/
 
+# Raw Higgsfield mobile/portrait plate exports (WIP, large) — processed plates
+# land in public/scenes/ once wired in. Never deploy the raw drops.
+/mobile images/
+
 # TS incremental build info
 *.tsbuildinfo
