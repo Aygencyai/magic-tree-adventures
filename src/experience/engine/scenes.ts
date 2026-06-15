@@ -310,5 +310,72 @@ export const CHAKRAS_JOURNEY: SceneDef[] = [
   },
 ];
 
+/**
+ * The About experience (Phase 6.2) — the sixty-year story behind the book as a
+ * short, warm beat sequence: the origin (the 1964 magic apple tree + Poppa
+ * Stan's bedtime stories) → Sara, the author → Alejandra, the illustrator →
+ * a Poppa Stan close with the buy CTA. Only the origin beat needs its own plate
+ * (`about-origin`, the apple-tree canopy); the creator + close beats reuse the
+ * home-journey plates (glowing tree / Angelica / return garden) on-style — so,
+ * like Chakras, this is pure data with zero engine/overlay changes. The real
+ * author photos + bios live in the page's crawlable tail (Sara = Author,
+ * Alejandra = Illustrator; Jools dropped per Louis), not as journey sprites.
+ */
+export const ABOUT_JOURNEY: SceneDef[] = [
+  {
+    id: "about-origin",
+    image: `${W}/about-origin-16x9.webp`,
+    depth: `${W}/about-origin-16x9.depth.webp`,
+    depthStrength: 0.035,
+    tint: 0xffe0a0,
+    motes: 1,
+    overlay: {
+      kicker: "Where it all began",
+      title: "The Old Apple Tree",
+      line: "In 1964, a little girl found a magic tree at the bottom of the garden — and Poppa Stan's bedtime stories began.",
+    },
+  },
+  {
+    id: "about-author",
+    image: `${W}/beat2-glowing-tree-16x9.webp`,
+    depth: `${W}/beat2-glowing-tree-16x9.depth.webp`,
+    depthStrength: 0.04,
+    tint: 0xffd27a,
+    motes: 1.1,
+    overlay: {
+      kicker: "The author",
+      title: "Sara Oberman Babai",
+      line: "She wove the wisdom of the chakras into Poppa Stan's tales, so every child could find a little more light inside.",
+    },
+  },
+  {
+    id: "about-illustrator",
+    image: `${W}/beat4-angelica-reveal-16x9.webp`,
+    depth: `${W}/beat4-angelica-reveal-16x9.depth.webp`,
+    depthStrength: 0.045,
+    tint: 0xf6c8d6,
+    motes: 1.2,
+    overlay: {
+      kicker: "The illustrator",
+      title: "Alejandra Barajas",
+      line: "Her brush brought the land of Angelica to life — golden hills, shining lakes, and angels with shimmering wings.",
+    },
+  },
+  {
+    id: "about-close",
+    image: `${W}/beat10-return-garden-16x9.webp`,
+    depth: `${W}/beat10-return-garden-16x9.depth.webp`,
+    depthStrength: 0.035,
+    tint: 0xffe0a0,
+    motes: 1,
+    overlay: {
+      kicker: "For Poppa Stan",
+      title: "Every Child Has a Voice",
+      line: "Sixty years of bedtime stories, now a book — so every child, everywhere, can find their own.",
+    },
+    cta: true,
+  },
+];
+
 /** Plate aspect — all processed plates are outpainted to 16:9 (2752×1536). */
 export const PLATE_ASPECT = 16 / 9;

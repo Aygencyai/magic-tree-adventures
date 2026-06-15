@@ -223,8 +223,8 @@ export default function BuyPage() {
                   ever be the same.
                 </p>
                 <p className="mt-3 text-sm text-bark-muted">
-                  Written by Jools Abrams &bull; Spiritual guidance by Sara
-                  Oberman Babai &bull; Illustrated by Alejandra Barajas
+                  Written by Sara Oberman Babai &bull; Illustrated by Alejandra
+                  Barajas
                 </p>
               </Reveal>
               <Reveal delay={0.25}>

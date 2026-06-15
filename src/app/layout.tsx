@@ -44,13 +44,10 @@ export const metadata: Metadata = {
     "Angelica",
     "finding your voice",
     "children's mindfulness book",
-    "Jools Abrams",
+    "Sara Oberman Babai",
   ],
-  authors: [
-    { name: "Jools Abrams" },
-    { name: "Sara Oberman Babai" },
-  ],
-  creator: "Jools Abrams",
+  authors: [{ name: "Sara Oberman Babai" }],
+  creator: "Sara Oberman Babai",
   publisher: "The Magic Tree Adventures",
   openGraph: {
     title: "The Magic Tree Adventures — Journey to the Crystal Mountain",
@@ -94,16 +91,10 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Book",
               name: "The Magic Tree Adventures: Journey to the Crystal Mountain",
-              author: [
-                {
-                  "@type": "Person",
-                  name: "Jools Abrams",
-                },
-                {
-                  "@type": "Person",
-                  name: "Sara Oberman Babai",
-                },
-              ],
+              author: {
+                "@type": "Person",
+                name: "Sara Oberman Babai",
+              },
               illustrator: {
                 "@type": "Person",
                 name: "Alejandra Barajas",
