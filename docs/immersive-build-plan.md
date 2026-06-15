@@ -358,7 +358,12 @@ one world.
 > as DOM text** (the canvas is decoration over crawlable content) and code-splitting/disposing
 > each canvas per route. SEO is a build constraint here, not a reason to keep pages plain.
 
-### 6.0 Generalise the experience engine into a reusable per-page system
+### 6.0 Generalise the experience engine into a reusable per-page system ✅ DONE (2026-06-15)
+**Shipped:** `JOURNEY`→`HOME_JOURNEY`; `ExperienceMount`→`Experience` taking a `journey` prop
+(computes track height from it); `ExperienceCanvas`/`JourneyOverlays`/`StaticJourney` all take
+`journey`; `/` and `/experience` render `<Experience journey={HOME_JOURNEY} />`. Snap, `?p=`,
+progress bar, reduced-motion all unchanged. Build + tsc clean; homepage mount verified.
+
 The engine is already 90% generic — make it fully parameterised so each page is just *data*:
 - `SceneEngine` already takes `defs: SceneDef[]` ✅. Generalise `JourneyOverlays` (drop the
   `import { JOURNEY }`; take a `journey` prop) and `ExperienceMount` (take `journey` + compute
@@ -396,11 +401,12 @@ Natural fit — the 7 chakras are already a beat sequence with rich copy in `con
 - Beats: the book hero (cover / crystal mountain, book **page-01/24**) → "what's inside" (journey
   + chakras teaser) → a review beat → strong **buy CTA** beat (price/format/buy button).
 
-### 6.4 Remove the Story page
-- Delete `/story` route + its components (`JourneyMap`, `CharacterDeepDive`, `StoryTeaser`, etc.
-  — confirm none are reused). Drop "The Story" from `NAV_LINKS` (`constants.ts`). The homepage
-  journey carries the story. Update any internal links that pointed at `/story` (e.g. the
-  journey/StaticJourney "Explore the Story" CTA → point Home or Chakras).
+### 6.4 Remove the Story page ✅ DONE (2026-06-15)
+**Shipped:** deleted `src/app/story/page.tsx` (no dedicated components existed — it only used
+shared UI primitives). Dropped "The Story" from `NAV_LINKS`. Repointed every `/story` link:
+journey + StaticJourney closing CTA → `/chakras` "Discover the Chakras"; not-found → `/chakras`;
+old Chakra-Explorer CTA + orphaned Hero → `/` "Enter the Journey"; removed the sitemap entry.
+No `/story` references remain; build clean. (Done early, alongside 6.0 — both no-art structural.)
 
 ### 6.5 Assets, perf, SEO, a11y across all experiences
 - **Higgsfield generation pass** for Chakras (7+ plates), About (origin + creators), Buy
