@@ -247,7 +247,28 @@ labelled workstreams below; commit per workstream. **Re-read this section at the
 > snap-to-beat scroll · dedicated Alina & Gino plate generated from the book · the homepage
 > tail (Reviews/Newsletter) restyled to the book look. Inner-page cohesion stays Phase 6.
 
-### A. Snap-to-beat scroll (the journey should *land* on beats)
+### A. Snap-to-beat scroll (the journey should *land* on beats) ✅ DONE (2026-06-15)
+**Shipped:** `engine/JourneySnap.ts` — wired into `SceneEngine` (constructed after Lenis,
+disposed with it; the engine owns the scroll source). Hybrid snap: analog scrubbing stays
+(engine + overlays still read `journeyProgress()` each frame; snap only nudges the scroll
+position). Idle = debounced ~140ms after the last wheel/touch gesture **and** Lenis velocity
+settled (covers trackpad + touch momentum). Direction bias `FORWARD_BIAS=0.25` → one flick ≈
+one beat (symmetric backward). A fresh gesture cancels any in-flight snap (`lenis.scrollTo`
+`lock:false`) and re-arms. Only snaps while the scroll sits *inside* `[data-journey-track]` —
+never fights the nav above or the conversion tail below (so `track.offsetTop` is honoured, not
+assumed 0). Bypassed under `?p=` and reduced motion (`disabled()` predicate). Tunables at the
+top of `JourneySnap.ts`: `IDLE_MS`, `VELOCITY_EPS`, `SNAP_DURATION`, `FORWARD_BIAS`.
+
+**Verified (headless WebGL, Chrome-for-Testing + ANGLE/swiftshader, prod build):** canvas +
+WebGL mount, zero console errors. Snap behavioural test via CDP wheel events + settle-until-
+stable polling: one flick forward lands beat 1.000 then 2.000; small back-flick stays (2.000);
+back-flick returns one beat (1.001); hard flicks settle *exactly* on a beat (2.000, 4.000);
+`?p=0.5` freezes the journey with snap disabled (free scroll, no snap-back). `pnpm build` clean
+(`/experience` 99.2 kB, unchanged); `tsc --noEmit` clean; target-selection math unit-tested.
+> Harness note: `chrome-headless-shell` can't client-render the `next/dynamic({ssr:false})`
+> canvas (Suspense stays in `BAILOUT`); the **full Chrome-for-Testing** binary (with
+> `--user-data-dir`) does. Use it, not the shell, for behavioural WebGL checks here.
+
 **Problem:** pure analog scrubbing makes beats hard to rest on — the ideal spot (beat centred,
 transition complete) is a moving target and trackpad momentum overshoots.
 **Approach (hybrid snap, NOT full scroll-hijack):**
@@ -348,11 +369,11 @@ Natural fit — the 7 chakras are already a beat sequence with rich copy in `con
   chakra's story moment (e.g. Throat = the crystal cave). Replaces today's Chakra Explorer.
 
 ### 6.2 About experience (`/about`)
-- **Content correction (Louis):** the About page features **Sara (Author)** and **Alejandra
-  Barajas (Illustrator)** — two people. ⚠ This overrides current `constants.ts` `CREATORS`
-  (which lists *Jools Abrams* as Author and Sara as "Spiritual Guide"). Reattribute Sara →
-  Author and **drop Jools** from About. *(Flagged for final confirm — author credit is
-  high-stakes; see session note.)*
+- **Content correction (Louis, confirmed 2026-06-15):** the About page features **Sara
+  (Author)** and **Alejandra Barajas (Illustrator)** — two people. This overrides current
+  `constants.ts` `CREATORS` (which lists *Jools Abrams* as Author and Sara as "Spiritual
+  Guide"): reattribute Sara → **Author** and **drop Jools** entirely. Keep the in-story
+  grandfather **Poppa Stan** in the origin beats.
 - Beats: the origin (1964, the old apple tree, Poppa Stan's bedtime stories — the 60-year
   story) → **Sara, the author** → **Alejandra, the illustrator** → invite/close.
 - Art: generate origin/garden scenes from book **page-05/06**; for Sara + Alejandra use the real
