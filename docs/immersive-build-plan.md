@@ -471,3 +471,54 @@ fold into a later phase or turn out unnecessary.
 - One phase per session; `pnpm build` + verify at each phase end; commit `feat: magic-tree Phase N — …`; `/wrap` then `/clear`/`/compact` between phases.
 - Re-read this file at the start of each phase (source of truth).
 - **Housekeeping:** the `projects/magic-tree/` folder is docs-only and duplicates this project's name — consolidate it into `projects/magic-tree-adventures/` (or remove) to stop the two-directory confusion.
+
+---
+
+## Phase 7 — Tail cohesion: every section feels like the painterly world (started 2026-06-15)
+
+**Problem (Louis, 2026-06-15):** after the immersive WebGL journey releases, the
+crawlable tails (Poppa Stan story, creators, buy panel, reviews) "become
+uninteractive and don't match the whole site" — flat cream sections with line
+icons + letter avatars read as a different website stapled on. Also: the
+homepage didn't make the scroll interaction clear.
+
+**Decisions (Louis, 2026-06-15):**
+1. **Homepage entry = playful scroll coachmark** ✅ DONE (commit `e09fcfd`):
+   "scroll to explore" pill (sparkles + chevron wave) + Gino peeking/bobbing,
+   threaded via `<Experience intro={…}>`; fades on first scroll; reduced-motion
+   safe. Also fixed About author-photo centring (`object-[center_22%]`).
+2. **Tails = per-section bespoke art** (chosen over restyle-with-existing) +
+   **gentle life** ("uninteractive" → add parallax/float/hover, reuse our
+   `effects/` FloatingParticles/GoldenGlow). Every tail section gets its own
+   on-style painterly element, not a reused plate.
+3. **Buy book cover = designed painterly title-treatment**, NOT an AI-faked
+   cover (book is really published, StoryTerrace 2025) and NOT the real file.
+
+**Hard content-sensitivity guardrails (non-negotiable):**
+- **No AI likeness of real people** — Poppa Stan (real, deceased grandfather)
+  and the authors are represented by the book's *world* (apple tree, garden,
+  Angelica, the lion, angels, crystal mountain, his quote) + the real author
+  photos we already have. Never AI-generate their faces.
+- **No fake book cover** — designed title-treatment only (decision 3).
+- Bespoke art = scenes/landscapes/objects from the book's owned art, via the
+  zero-drift **extend-owned-art** pipeline (outpaint `public/scenes/raw/page-*`
+  → `scripts/process-plate.mjs` → `web/*.webp` background band). Higgsfield
+  workspace = Aygency team (2848 cr at start); watch balance.
+
+**The look (applied to every tail section):** painterly background band (owned
+art, scrimmed with a parchment/forest gradient for legibility) → content in
+`glass-warm` cards over it → gentle parallax on the band + float on accents +
+hover on cards. Real copy stays SSR'd DOM (SEO/reduced-motion unchanged).
+
+**Sub-phases (one page per increment; verify + commit each; look-check after 7.1):**
+- **7.1 About tail** (the named pain point — the look-bar): Poppa Stan story,
+  timeline, creators (painterly-framed real photos), dedication, what's-next.
+- **7.2 Buy tail:** designed cover title-treatment + buy panel, what's-inside,
+  reviews, gift ideas, quote, newsletter.
+- **7.3 Home + Chakras tails:** reviews + newsletter (home); rainbow close
+  (chakras).
+
+**Exit:** every tail section sits in the painterly world with gentle life; no
+flat-cream dead-stops; copy still crawlable; reduced-motion + 375→1440 clean;
+zero console errors. **Rights gate** (AI-extended Barajas art) still applies
+before publish — tracked in Open loose ends.

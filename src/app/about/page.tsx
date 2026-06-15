@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Reveal from "@/components/ui/Reveal";
 import Button from "@/components/ui/Button";
 import Experience from "@/experience/Experience";
+import PainterlyBand from "@/components/tail/PainterlyBand";
 import { ABOUT_JOURNEY } from "@/experience/engine/scenes";
 import { CHAKRAS } from "@/lib/constants";
 
@@ -78,48 +79,47 @@ export default function AboutPage() {
       <Experience journey={ABOUT_JOURNEY} />
 
       {/* Grounded tail — opaque, sits above the released sticky canvas. Real DOM
-          copy for crawlers + reduced-motion users + the conversion close. */}
+          copy for crawlers + reduced-motion users + the conversion close. Each
+          section lives in the painterly world via PainterlyBand (Phase 7.1). */}
       <div id="conversion-tail" className="relative z-20 bg-parchment">
         {/* Poppa Stan's Story */}
-        <section className="section-padding">
-          <div className="max-w-3xl mx-auto px-6 lg:px-12">
-            <Reveal>
-              <div className="flex items-center justify-center gap-3 mb-10">
-                <div className="h-px flex-1 bg-gold/20" />
-                <p className="font-accent text-gold text-lg whitespace-nowrap">
-                  In loving memory of Poppa Stan
-                </p>
-                <div className="h-px flex-1 bg-gold/20" />
-              </div>
-            </Reveal>
+        <PainterlyBand
+          image="/scenes/web/beat1-garden-16x9.webp"
+          particles
+          innerClassName="max-w-3xl"
+        >
+          <Reveal>
+            <div className="flex items-center justify-center gap-3 mb-10">
+              <div className="h-px flex-1 bg-gold/30" />
+              <p className="font-accent text-gold-dark text-lg whitespace-nowrap">
+                In loving memory of Poppa Stan
+              </p>
+              <div className="h-px flex-1 bg-gold/30" />
+            </div>
+          </Reveal>
 
-            <div className="space-y-6">
-              <Reveal>
+          <Reveal delay={0.08}>
+            <div className="glass-warm rounded-2xl p-8 md:p-10 shadow-[0_24px_60px_-30px_rgba(61,43,31,0.5)]">
+              <div className="space-y-6">
                 <p className="text-lg text-bark-light leading-relaxed">
                   In 1964, a four-year-old girl moved with her family to a new
                   home. It was a lovely house with creaky floors and wooden
                   panels on the walls. But what made it special — what truly made
                   it feel like home — was the garden.
                 </p>
-              </Reveal>
-              <Reveal delay={0.08}>
                 <p className="text-lg text-bark-light leading-relaxed">
                   At the bottom of that garden, tucked behind overgrown bushes
                   and the prettiest wildflowers, stood an old apple tree. The
                   tree had been there for as long as anyone could remember, its
                   trunk knobbly and twisted, growing in every direction.
                 </p>
-              </Reveal>
-              <Reveal delay={0.16}>
-                <blockquote className="border-l-4 border-gold/40 pl-6 py-2 my-8">
-                  <p className="font-accent text-gold text-xl md:text-2xl leading-relaxed">
+                <blockquote className="border-l-4 border-gold/50 pl-6 py-2 my-8">
+                  <p className="font-accent text-gold-dark text-xl md:text-2xl leading-relaxed">
                     &ldquo;If you listen closely on a quiet night, you can hear
                     its whispers, like the wind gently blowing.&rdquo;
                   </p>
                   <p className="text-bark-muted text-sm mt-2">&mdash; Poppa Stan</p>
                 </blockquote>
-              </Reveal>
-              <Reveal delay={0.24}>
                 <p className="text-lg text-bark-light leading-relaxed">
                   Those bedtime stories were passed down through four generations
                   — enchanting children, grandchildren, and great-grandchildren.
@@ -127,50 +127,51 @@ export default function AboutPage() {
                   But the heart of it never changed: a magic tree, a golden door,
                   and a world where every child&rsquo;s voice matters.
                 </p>
-              </Reveal>
-              <Reveal delay={0.32}>
                 <p className="text-lg text-bark-light leading-relaxed">
                   In 2021, Poppa Stan passed away at the age of 93. These books
                   are dedicated to his loving memory and the wonderful, magical
                   stories that brought light and laughter into so many lives.
                 </p>
-              </Reveal>
+              </div>
             </div>
-          </div>
-        </section>
+          </Reveal>
+        </PainterlyBand>
 
         {/* Timeline */}
-        <section className="section-padding bg-parchment-dark">
-          <div className="max-w-3xl mx-auto px-6 lg:px-12">
-            <Reveal>
-              <div className="text-center mb-14">
-                <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-bark">
-                  Sixty Years of Magic
-                </h2>
-                <p className="font-accent text-gold text-xl mt-3">
-                  From bedtime stories to the bookshelf
-                </p>
-              </div>
-            </Reveal>
-            <div className="relative">
-              {/* Vertical line */}
-              <div className="absolute left-6 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-0.5 bg-gold/20" />
+        <PainterlyBand
+          image="/scenes/web/beat10-return-garden-16x9.webp"
+          innerClassName="max-w-3xl"
+        >
+          <Reveal>
+            <div className="text-center mb-14">
+              <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-bark">
+                Sixty Years of Magic
+              </h2>
+              <p className="font-accent text-gold-dark text-xl mt-3">
+                From bedtime stories to the bookshelf
+              </p>
+            </div>
+          </Reveal>
+          <div className="relative">
+            {/* Vertical line */}
+            <div className="absolute left-6 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-0.5 bg-gold/30" />
 
-              {TIMELINE.map((event, i) => (
-                <Reveal key={event.year} delay={i * 0.1}>
-                  <div
-                    className={`relative flex items-start gap-6 md:gap-12 mb-12 last:mb-0 ${
-                      i % 2 === 0
-                        ? "md:flex-row"
-                        : "md:flex-row-reverse md:text-right"
-                    }`}
-                  >
-                    {/* Dot */}
-                    <div className="absolute left-6 md:left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-gold ring-4 ring-parchment-dark z-10 mt-1.5" />
+            {TIMELINE.map((event, i) => (
+              <Reveal key={event.year} delay={i * 0.1}>
+                <div
+                  className={`relative flex items-start gap-6 md:gap-12 mb-8 last:mb-0 ${
+                    i % 2 === 0
+                      ? "md:flex-row"
+                      : "md:flex-row-reverse md:text-right"
+                  }`}
+                >
+                  {/* Dot */}
+                  <div className="absolute left-6 md:left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-gold ring-4 ring-parchment z-10 mt-5" />
 
-                    {/* Content */}
-                    <div className="flex-1 pl-14 md:pl-0">
-                      <span className="inline-block font-heading text-sm font-bold text-gold bg-gold/10 rounded-full px-3 py-0.5 mb-2">
+                  {/* Content */}
+                  <div className="flex-1 pl-14 md:pl-0">
+                    <div className="glass-warm inline-block w-full rounded-2xl px-5 py-4 shadow-[0_16px_40px_-24px_rgba(61,43,31,0.45)] transition-transform duration-300 hover:-translate-y-0.5">
+                      <span className="inline-block font-heading text-sm font-bold text-gold-dark bg-gold/15 rounded-full px-3 py-0.5 mb-2">
                         {event.year}
                       </span>
                       <h3 className="font-heading text-xl font-semibold text-bark">
@@ -180,110 +181,115 @@ export default function AboutPage() {
                         {event.description}
                       </p>
                     </div>
-
-                    {/* Spacer for alternating layout */}
-                    <div className="hidden md:block flex-1" />
                   </div>
-                </Reveal>
-              ))}
-            </div>
+
+                  {/* Spacer for alternating layout */}
+                  <div className="hidden md:block flex-1" />
+                </div>
+              </Reveal>
+            ))}
           </div>
-        </section>
+        </PainterlyBand>
 
         {/* Creative Team */}
-        <section className="section-padding">
-          <div className="max-w-5xl mx-auto px-6 lg:px-12">
-            <Reveal>
-              <div className="text-center mb-14">
-                <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-bark">
-                  The Creative Team
-                </h2>
-                <p className="font-accent text-gold text-xl mt-3">
-                  Bringing Poppa Stan&rsquo;s stories to life
-                </p>
-              </div>
-            </Reveal>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-              {TEAM.map((person, i) => (
-                <Reveal key={person.name} delay={i * 0.12}>
-                  <div className="bg-parchment-dark rounded-2xl p-8 shadow-card text-center hover:shadow-card-hover transition-shadow duration-300 h-full">
-                    {/* Author photo in a soft circular frame */}
-                    <div className="relative w-28 h-28 rounded-full mx-auto mb-5 overflow-hidden ring-4 ring-parchment shadow-[0_10px_30px_-12px_rgba(61,43,31,0.5)]">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={person.photo}
-                        alt={`${person.name}, ${person.role}`}
-                        className="w-full h-full object-cover object-[center_22%]"
-                      />
-                    </div>
-                    <h3 className="font-heading text-xl font-semibold text-bark">
-                      {person.name}
-                    </h3>
-                    <p className="font-accent text-gold mt-1">{person.role}</p>
-                    <p className="text-bark-light mt-4 text-sm leading-relaxed">
-                      {person.bio}
-                    </p>
-                  </div>
-                </Reveal>
-              ))}
+        <PainterlyBand image="/scenes/web/beat2-glowing-tree-16x9.webp" particles>
+          <Reveal>
+            <div className="text-center mb-14">
+              <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-bark">
+                The Creative Team
+              </h2>
+              <p className="font-accent text-gold-dark text-xl mt-3">
+                Bringing Poppa Stan&rsquo;s stories to life
+              </p>
             </div>
+          </Reveal>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+            {TEAM.map((person, i) => (
+              <Reveal key={person.name} delay={i * 0.12}>
+                <div className="glass-warm rounded-2xl p-8 shadow-[0_24px_60px_-30px_rgba(61,43,31,0.5)] text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-card-hover h-full">
+                  {/* Author photo in a painterly gold frame */}
+                  <div className="relative w-28 h-28 rounded-full mx-auto mb-5 overflow-hidden ring-4 ring-gold/40 shadow-[0_12px_30px_-12px_rgba(200,150,62,0.6)]">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={person.photo}
+                      alt={`${person.name}, ${person.role}`}
+                      className="w-full h-full object-cover object-[center_22%]"
+                    />
+                  </div>
+                  <h3 className="font-heading text-xl font-semibold text-bark">
+                    {person.name}
+                  </h3>
+                  <p className="font-accent text-gold-dark mt-1">{person.role}</p>
+                  <p className="text-bark-light mt-4 text-sm leading-relaxed">
+                    {person.bio}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
           </div>
-        </section>
+        </PainterlyBand>
 
         {/* Dedication */}
-        <section className="section-padding bg-forest-dark">
-          <div className="max-w-3xl mx-auto px-6 lg:px-12 text-center">
-            <Reveal>
-              <p className="font-accent text-gold-light text-lg mb-6">
-                A dedication from the book
-              </p>
-            </Reveal>
-            <Reveal delay={0.15}>
-              <blockquote className="font-heading text-2xl md:text-3xl text-parchment leading-relaxed font-medium">
-                &ldquo;For Poppa Stan, whose magical stories have been shared for
-                over sixty years. You taught us that every child has a voice, and
-                every voice deserves to be heard.&rdquo;
-              </blockquote>
-            </Reveal>
-            <Reveal delay={0.3}>
-              <div className="flex justify-center gap-1.5 mt-10">
-                {CHAKRAS.map((chakra) => (
-                  <div
-                    key={chakra.name}
-                    className="w-2 h-2 rounded-full opacity-60"
-                    style={{ backgroundColor: chakra.colour }}
-                  />
-                ))}
-              </div>
-            </Reveal>
-          </div>
-        </section>
+        <PainterlyBand
+          image="/scenes/web/beat9-flying-home-16x9.webp"
+          tone="dark"
+          particles
+          innerClassName="max-w-3xl text-center"
+        >
+          <Reveal>
+            <p className="font-accent text-gold-light text-lg mb-6">
+              A dedication from the book
+            </p>
+          </Reveal>
+          <Reveal delay={0.15}>
+            <blockquote className="font-heading text-2xl md:text-3xl text-parchment leading-relaxed font-medium">
+              &ldquo;For Poppa Stan, whose magical stories have been shared for
+              over sixty years. You taught us that every child has a voice, and
+              every voice deserves to be heard.&rdquo;
+            </blockquote>
+          </Reveal>
+          <Reveal delay={0.3}>
+            <div className="flex justify-center gap-1.5 mt-10">
+              {CHAKRAS.map((chakra) => (
+                <div
+                  key={chakra.name}
+                  className="w-2.5 h-2.5 rounded-full"
+                  style={{
+                    backgroundColor: chakra.colour,
+                    boxShadow: `0 0 12px 2px ${chakra.colour}`,
+                  }}
+                />
+              ))}
+            </div>
+          </Reveal>
+        </PainterlyBand>
 
         {/* What's Next */}
-        <section className="section-padding bg-gradient-to-b from-parchment to-parchment-dark">
-          <div className="max-w-4xl mx-auto px-6 lg:px-12 text-center">
-            <Reveal>
-              <h2 className="font-heading text-3xl md:text-4xl font-semibold text-bark mb-4">
-                Book One is Just the Beginning
-              </h2>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <p className="text-bark-light text-lg mb-8 max-w-xl mx-auto leading-relaxed">
-                The Magic Tree Adventures is a series. Each book guides children
-                through a different chakra — a different way to discover who they
-                truly are.
-              </p>
-            </Reveal>
-            <Reveal delay={0.2}>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Button href="/buy">Get Book One</Button>
-                <Button href="/chakras" variant="secondary">
-                  Explore the Chakras
-                </Button>
-              </div>
-            </Reveal>
-          </div>
-        </section>
+        <PainterlyBand
+          image="/scenes/web/beat7-crystal-mountain-arrival-16x9.webp"
+          innerClassName="max-w-4xl text-center"
+        >
+          <Reveal>
+            <h2 className="font-heading text-3xl md:text-4xl font-semibold text-bark mb-4">
+              Book One is Just the Beginning
+            </h2>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <p className="text-bark-light text-lg mb-8 max-w-xl mx-auto leading-relaxed">
+              The Magic Tree Adventures is a series. Each book guides children
+              through a different chakra — a different way to discover who they
+              truly are.
+            </p>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Button href="/buy">Get Book One</Button>
+              <Button href="/chakras" variant="secondary">
+                Explore the Chakras
+              </Button>
+            </div>
+          </Reveal>
+        </PainterlyBand>
       </div>
     </>
   );
