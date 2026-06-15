@@ -15,6 +15,11 @@ const OVERSCAN = 1.05;
 /** width (in beat units) of the dissolve between two beats — the rest of each
  *  beat's scroll range shows a single clean plate. Smaller = sharper/cleaner. */
 const CROSSFADE_BAND = 0.2;
+/** per-frame decay of the mouse-parallax target back toward centre. The plate
+ *  reacts while the cursor moves, then settles to the UNDISTORTED artwork once
+ *  it goes idle — so a parked/off-centre cursor never leaves characters warped
+ *  by the imperfect depth proxy. ~0.94/frame ≈ a ~1s ease back to centre. */
+const POINTER_DECAY = 0.94;
 
 /**
  * The Phase 2 scene engine. Owns the renderer, a stack of depth-parallax plates
@@ -194,7 +199,11 @@ export class SceneEngine {
     this.progress = journeyProgress(this.forcedProgress);
 
     if (!this.quality.reducedMotion) {
-      // ease pointer for buttery parallax
+      // Self-centring parallax: the target tracks the cursor only while it's
+      // actively moving (pointermove keeps rewriting it); the moment it goes
+      // idle this decay wins and eases the plate back to its undistorted state,
+      // so characters never stay warped by a parked, off-centre cursor.
+      this.pointerTarget.multiplyScalar(POINTER_DECAY);
       this.pointer.lerp(this.pointerTarget, 0.06);
     }
 
@@ -203,7 +212,7 @@ export class SceneEngine {
 
     // ambient mote field: ease tint toward active beat, freeze under reduced-motion
     this.particles.setTint(tint, this.quality.reducedMotion ? 1 : 0.02);
-    this.particles.setDensityOpacity(this.quality.reducedMotion ? 0.2 : 0.5);
+    this.particles.setDensityOpacity(this.quality.reducedMotion ? 0.2 : 0.6);
     if (!this.quality.reducedMotion) this.particles.update(t);
 
     // gentle camera rig — a breath of push-in across the journey + pointer drift

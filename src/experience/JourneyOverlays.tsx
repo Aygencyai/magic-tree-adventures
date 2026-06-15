@@ -90,8 +90,8 @@ export default function JourneyOverlays() {
         for (const el of orbEls) {
           const t0 = Number(el.dataset.orb);
           const k = smooth(invlerp(t0 - 0.06, t0 + 0.06, localP));
-          el.style.opacity = String(0.18 + 0.82 * k);
-          el.style.transform = `scale(${0.55 + 0.45 * k})`;
+          el.style.opacity = String(0.25 + 0.75 * k);
+          el.style.transform = `scale(${0.6 + 0.55 * k})`;
         }
         for (const el of labelEls) {
           const t0 = Number(el.dataset.label);
@@ -185,32 +185,40 @@ function Cameos({ sprites }: { sprites: NonNullable<(typeof JOURNEY)[number]["sp
 
 function ChakraIgnition() {
   return (
-    <div className="absolute inset-y-0 right-[6vw] flex flex-col-reverse items-center justify-center gap-3 md:right-[9vw] md:gap-4">
-      {CHAKRAS.map((c, i) => {
-        const t0 = 0.18 + i * 0.1; // ignite root → crown, staggered through the beat
-        return (
-          <div key={c.name} className="flex items-center gap-2">
-            <span
-              data-label={t0}
-              style={{ opacity: 0 }}
-              className="font-accent text-base text-parchment drop-shadow-[0_1px_4px_rgba(61,43,31,0.8)] md:text-lg"
-            >
-              {c.name}
-            </span>
-            <span
-              data-orb={t0}
-              aria-hidden
-              style={{
-                opacity: 0.18,
-                transform: "scale(0.55)",
-                backgroundColor: c.colour,
-                boxShadow: `0 0 18px 4px ${c.colour}, 0 0 6px 1px ${c.colour}`,
-              }}
-              className="block h-4 w-4 rounded-full md:h-5 md:w-5"
-            />
-          </div>
-        );
-      })}
+    <div className="absolute inset-y-0 right-[6vw] flex items-center md:right-[9vw]">
+      {/* soft dark scrim so the coloured lights pop against the bright mountain */}
+      <div
+        aria-hidden
+        className="absolute inset-y-[8vh] -right-[7vw] -left-[10vw] rounded-full bg-forest-dark/35 blur-3xl md:-right-[10vw]"
+      />
+      <div className="relative flex flex-col-reverse items-center justify-center gap-5 md:gap-7">
+        {CHAKRAS.map((c, i) => {
+          const t0 = 0.18 + i * 0.1; // ignite root → crown, staggered through the beat
+          return (
+            <div key={c.name} className="flex items-center gap-3">
+              <span
+                data-label={t0}
+                style={{ opacity: 0 }}
+                className="font-accent text-lg font-bold text-parchment drop-shadow-[0_1px_6px_rgba(26,58,40,1)] md:text-xl"
+              >
+                {c.name}
+              </span>
+              <span
+                data-orb={t0}
+                aria-hidden
+                style={{
+                  opacity: 0.3,
+                  transform: "scale(0.6)",
+                  // hot white core → saturated colour halo reads as a glowing light
+                  background: `radial-gradient(circle at 50% 42%, #fff 0%, ${c.colour} 46%, ${c.colour} 72%)`,
+                  boxShadow: `0 0 48px 16px ${c.colour}, 0 0 20px 7px ${c.colour}, 0 0 7px 2px #fff`,
+                }}
+                className="block h-8 w-8 rounded-full md:h-11 md:w-11"
+              />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
