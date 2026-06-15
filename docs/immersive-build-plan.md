@@ -316,9 +316,18 @@ sections, not part of the book.
   just different info; nav still flips solid here.
 
 ### D. Performance
+- ✅ **Washout / ghosting fix (2026-06-15, from live feedback).** The crossfade blended two
+  semi-transparent plates across the *whole* gap (`opacity = 1 - |s-i|`) → constant ghosted
+  double-image + bright parchment background bleeding through → "distorted faces", washout,
+  "only the exact-beat frame looks right". Replaced with a **layered hold + short dissolve**
+  (`SceneEngine.updateScenes`, `CROSSFADE_BAND=0.2`): current beat held opaque as the back
+  layer, next beat fades in over it only in a thin band at the midpoint → ~80% of each beat is
+  one clean plate, no bg bleed. Also tamed bloom (strength 0.42→0.22, threshold 0.72→0.85) and
+  additive motes (0.85→0.5). Verified via screenshots at beat centres + off-midpoint + midpoint.
 - Texture compression (KTX2/basis), lazy-load per scene, confirm canvas stays code-split.
 - Headless swiftshader over-brightens bloom; judge bloom/chakra-orb prominence on a real GPU and
-  bump **mobile chakra-orb contrast** (deferred from P3) if still faint.
+  bump **mobile chakra-orb contrast** (deferred from P3) if still faint. `CROSSFADE_BAND` and the
+  bloom params are the tuning knobs if the dissolve still feels too soft/hot on a real GPU.
 - Optional: real **Depth-Anything V2 / MiDaS** maps to replace the greyscale proxies (drop-in at
   `*.depth.webp`, no code change) — decide if the extra parallax pop is worth it on real GPU.
 
