@@ -12,6 +12,9 @@ import { JOURNEY, PLATE_ASPECT, type SceneDef } from "./scenes";
 const FOV = 45;
 const BASE_DIST = 5;
 const OVERSCAN = 1.05;
+/** width (in beat units) of the dissolve between two beats — the rest of each
+ *  beat's scroll range shows a single clean plate. Smaller = sharper/cleaner. */
+const CROSSFADE_BAND = 0.2;
 
 /**
  * The Phase 2 scene engine. Owns the renderer, a stack of depth-parallax plates
@@ -152,22 +155,36 @@ export class SceneEngine {
     );
   }
 
-  /** map progress → per-scene opacity (linear crossfade between neighbours) */
+  /**
+   * map progress → per-scene opacity using a **layered hold + short crossfade**.
+   *
+   * The current beat `k` is held fully opaque as the back layer; the next beat
+   * fades in *over* it only inside a narrow band centred on the midpoint, so for
+   * most of each beat's scroll range you see ONE clean plate (no ghosting), and
+   * the outgoing plate is always solid behind the incoming one (no bright
+   * parchment background bleeding through during the dissolve). A naïve linear
+   * `1-|s-i|` crossfade blended two semi-transparent plates across the whole gap
+   * — that read as distorted/doubled faces and washed everything out.
+   */
   private updateScenes() {
     const n = this.scenes.length;
     const s = this.progress * (n - 1);
-    let activeTint = this.scenes[0].def.tint;
-    let bestW = -1;
+    const k = Math.min(n - 1, Math.floor(s));
+    const frac = s - k;
+    // incoming plate fades in only across CROSSFADE_BAND, centred at the midpoint
+    const half = CROSSFADE_BAND / 2;
+    const fade = THREE.MathUtils.smoothstep(frac, 0.5 - half, 0.5 + half);
     for (let i = 0; i < n; i++) {
-      const w = Math.max(0, 1 - Math.abs(s - i));
-      this.scenes[i].setOpacity(w);
+      // i<k: already passed (hidden behind the opaque current plate) → skip draw
+      // i==k: current beat, fully opaque (back of the dissolve)
+      // i==k+1: next beat, fades in on top
+      // i>k+1: not reached yet
+      const o = i < k ? 0 : i === k ? 1 : i === k + 1 ? fade : 0;
+      this.scenes[i].setOpacity(o);
       this.scenes[i].setParallax(this.pointer.x, this.pointer.y);
-      if (w > bestW) {
-        bestW = w;
-        activeTint = this.scenes[i].def.tint;
-      }
     }
-    return activeTint;
+    const activeIdx = fade < 0.5 ? k : Math.min(n - 1, k + 1);
+    return this.scenes[activeIdx].def.tint;
   }
 
   private frame(timeMs: number) {
@@ -186,7 +203,7 @@ export class SceneEngine {
 
     // ambient mote field: ease tint toward active beat, freeze under reduced-motion
     this.particles.setTint(tint, this.quality.reducedMotion ? 1 : 0.02);
-    this.particles.setDensityOpacity(this.quality.reducedMotion ? 0.25 : 0.85);
+    this.particles.setDensityOpacity(this.quality.reducedMotion ? 0.2 : 0.5);
     if (!this.quality.reducedMotion) this.particles.update(t);
 
     // gentle camera rig — a breath of push-in across the journey + pointer drift

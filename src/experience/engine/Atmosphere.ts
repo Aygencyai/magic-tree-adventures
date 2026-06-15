@@ -27,9 +27,9 @@ export class Atmosphere {
     if (enableBloom) {
       this.bloom = new UnrealBloomPass(
         new THREE.Vector2(1, 1),
-        0.42, // strength — gentle
-        0.55, // radius
-        0.72, // threshold — only bright highlights bloom
+        0.22, // strength — a whisper; the painterly plates are already bright
+        0.5, // radius
+        0.85, // threshold — only the brightest highlights (crystals, sun) bloom
       );
       this.composer.addPass(this.bloom);
     } else {
