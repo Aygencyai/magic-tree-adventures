@@ -174,3 +174,52 @@ blur → mild contrast) — not true depth, but a smooth displacement driver tha
 luminance-edge smear the spike hit. The engine reads `*.depth.webp` from a generic slot:
 drop a real **Depth-Anything V2 / MiDaS** map at the same path and the look upgrades with no
 code change.
+
+## Phase 6.5 — Per-page art batch (2026-06-15)
+
+### ✅ Art batch COMPLETE (Chakras + About; Buy reuses existing plates)
+The per-page experiences (build-plan §6.5) needed new art only for **Chakras** (the page that
+genuinely needs a new set) plus a single **About origin** plate. **Buy** reuses the home-journey
+plates (mountain / angelica / garden) per the plan's "mostly reuse". All assets are
+`public/scenes/web/<name>-16x9.webp` (2048w colour) + `<name>-16x9.depth.webp` (greyscale proxy)
++ archival `public/scenes/processed/<name>-16x9.png`.
+
+**Chakras (8 plates) — `chakra-*-16x9`:**
+- **`chakra-intro`** — *generated* (nano_banana_pro i2i, throat-child as style ref): the boy
+  meditating with all **7 chakras glowing rainbow** up his body, lavender-and-gold sky, lush
+  foliage, sparkles. The page's showpiece opener ("The Magic Inside Every Child").
+- **`chakra-root … chakra-crown`** (7) — the book's page-22 meditating-child cards
+  (`public/chakras/*.png`), tight-cropped to the illustration (drops the right-edge text),
+  `outpaint_image` 16:9. Each sits on its own chakra-colour field (root=red, sacral=orange,
+  solar-plexus=yellow, heart=green, throat=blue, third-eye=lavender, crown=mauve) → the field
+  colour reinforces the engine's per-beat tint + the igniting orb. Throat happened to outpaint a
+  soft sky/sand horizon (kept — reads well).
+
+**About (1 new plate):**
+- **`about-origin`** — page-06 left, cropped to the **apple-tree canopy band** (Riley swinging in
+  the old apple tree, apples, lush foliage; cropped above the body text), `outpaint_image` 16:9.
+  The "1964 magic apple tree" origin beat. The Sara/Alejandra creator beats reuse the existing
+  author photos (`public/about/`) over a reused garden plate — **Jools dropped per Louis** (Sara =
+  Author, Alejandra = Illustrator).
+
+### Learnings (additive to Phase 1)
+- **`nano_banana_pro` (MCP) = `nano_banana_2` (server) for i2i** and supports **16:9 output
+  directly** — so a generated plate needs no separate outpaint step (used for `chakra-intro` +
+  the heart redo). Reference image passed via `medias[{role:"image"}]` preserves Barajas style +
+  the boy's identity faithfully.
+- **page-22 is not uniform:** the **heart** card is a head-and-shoulders *bust*, not the
+  full seated body the other 6 cards use — so outpainting it always yields a bust (tried twice).
+  Fix = **generate** a full-body heart via nano_banana i2i using a full-body chakra crop (root) as
+  the pose reference + "green field, green heart orb" → now matches the sequence. Lesson: check the
+  source card's shot scale before assuming a uniform outpaint; regenerate the odd one out.
+- **Outpaint is flaky under load** — 2 of 8 jobs (`throat`, `heart`) failed transiently on first
+  submit; a straight re-submit of the same `image_id` succeeded. Poll + retry, don't re-crop.
+- `scripts/process-plate.mjs` (new) — one input PNG → archival `processed/*.png` + 2048w
+  `web/*.webp` + smoothed-greyscale `web/*.depth.webp`. Codifies the Phase-1 pipeline.
+- Source crops live in `public/scenes/raw/crops/` (**gitignored** — regenerable from the cards via
+  `scripts/crop.mjs`). Total Phase-6.5 spend trivial (~25cr of the 2880 balance).
+
+### Still to wire (not art — build-plan §6.1–6.3)
+The plates exist; the **journeys don't yet consume them**. Next: add `CHAKRAS_JOURNEY` (intro →
+7 chakra beats with copy from `CHAKRAS` constants → close) and `ABOUT_JOURNEY` / `BUY_JOURNEY`
+to `engine/scenes.ts`, and route each page through `<Experience journey={…} />`.
