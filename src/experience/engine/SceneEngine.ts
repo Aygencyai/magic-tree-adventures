@@ -3,6 +3,7 @@ import Lenis from "lenis";
 import { ParallaxScene } from "./ParallaxScene";
 import { ParticleField } from "./ParticleField";
 import { Atmosphere } from "./Atmosphere";
+import { Portal } from "./Portal";
 import { detectQuality, type QualitySettings } from "./quality";
 import { JOURNEY, PLATE_ASPECT, type SceneDef } from "./scenes";
 
@@ -26,6 +27,9 @@ export class SceneEngine {
   private readonly scenes: ParallaxScene[];
   private readonly particles: ParticleField;
   private readonly atmosphere: Atmosphere;
+  private readonly portal: Portal;
+  /** index of the beat the golden-door transition fires after (-1 = none) */
+  private readonly portalIndex: number;
   private readonly lenis: Lenis;
 
   private readonly pointer = new THREE.Vector2(0, 0);
@@ -56,6 +60,10 @@ export class SceneEngine {
     this.particles = new ParticleField(this.quality.particleCount);
     this.particles.setPixelRatio(this.quality.pixelRatio);
     this.scene.add(this.particles.points);
+
+    this.portal = new Portal();
+    this.portalIndex = defs.findIndex((d) => d.portalAfter);
+    this.scene.add(this.portal.mesh);
 
     this.atmosphere = new Atmosphere(
       this.renderer,
@@ -114,6 +122,17 @@ export class SceneEngine {
     this.camera.updateProjectionMatrix();
     const { pw, ph } = this.planeSize();
     for (const s of this.scenes) s.setSize(pw, ph);
+    this.portal.setSize(pw, ph);
+  }
+
+  /** golden-door intensity: a smooth triangular pulse peaking at the midpoint
+   *  between the flagged beat and the next, 0 elsewhere */
+  private portalIntensity() {
+    if (this.portalIndex < 0) return 0;
+    const s = this.progress * (this.scenes.length - 1);
+    const peak = this.portalIndex + 0.5;
+    const raw = Math.max(0, 1 - Math.abs(s - peak) / 0.5);
+    return raw * raw * (3 - 2 * raw); // smoothstep ease
   }
 
   private onPointerMove(e: PointerEvent) {
@@ -152,6 +171,7 @@ export class SceneEngine {
     }
 
     const tint = this.updateScenes();
+    this.portal.setIntensity(this.portalIntensity());
 
     // ambient mote field: ease tint toward active beat, freeze under reduced-motion
     this.particles.setTint(tint, this.quality.reducedMotion ? 1 : 0.02);
@@ -178,6 +198,7 @@ export class SceneEngine {
     this.lenis.destroy();
     for (const s of this.scenes) s.dispose();
     this.particles.dispose();
+    this.portal.dispose();
     this.atmosphere.dispose();
     this.renderer.dispose();
   }

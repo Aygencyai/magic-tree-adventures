@@ -142,17 +142,57 @@ chakra-light ignition, and beat-synced Fraunces/Caveat HTML overlays.
 **Exit:** 60fps desktop, graceful mobile; scenes swap by scroll progress without jank.
 </details>
 
-## Phase 3 — The Journey (scroll choreography)
+## Phase 3 — The Journey (scroll choreography) ✅ DONE (2026-06-15)
 
-**Goal:** Wire the full 6-beat narrative.
-**Scope:**
-- Sequence all scenes along scroll progress.
-- **Golden Door portal shader** transition (radial bloom from garden → Angelica).
-- Chakra-light ignition sequence on the Crystal Mountain beat (ties to `CHAKRAS` constant).
-- Beat-synced HTML overlays: Fraunces headings + Caveat dialogue fade/rise per scene (Framer Motion).
-**Deliverables:** Full homepage journey playable top→bottom.
-**Dependencies:** Phase 2.
-**Exit:** Every beat lands; portal + chakra moments feel "wow"; copy is real (from `constants.ts`), not lorem.
+**Shipped:**
+- `engine/scenes.ts` — the full **9-beat** journey wired (Book One's complete arc across
+  the 8 owned plates; the Angelica plate carries two beats — the reveal, then meeting Alina
+  & Gino). Each `SceneDef` now also carries overlay copy (real, from the book + `constants.ts`),
+  per-beat tint, and `portalAfter`/`chakraIgnite`/`sprites`/`cta` flags. The two missing
+  narrative beats need no new plate: "The Golden Door" is the portal transition; "Meet Alina
+  & Gino" reuses the Angelica plate with character cameos.
+- `engine/Portal.ts` + `SceneEngine` wiring — the **Golden Door**: an additive radial
+  bloom (warm core + expanding ring + a faint vertical door-slit) firing as a smooth
+  triangular pulse at the midpoint of the beat flagged `portalAfter` (garden world → Angelica),
+  0 everywhere else. Aspect-locked, overscanned fullscreen quad, renderOrder above plates +
+  particles. Scroll-driven → safe under reduced motion.
+- `JourneyOverlays.tsx` — beat-synced HTML over the canvas: glass-warm copy cards (Caveat
+  kicker + Fraunces title + Caveat narration), the **7-chakra ignition** down the Crystal-
+  Mountain beat (root→crown stagger, colours from `CHAKRAS`), Alina & Gino **cameos** on the
+  meet beat, a **buy CTA** on the closing beat, and a scroll hint. Reads the same page scroll
+  as the engine (+ `?p=` deep-link, mirroring the engine's freeze) so copy stays locked to its
+  plate. Scroll spacer in `ExperienceMount` now grows with beat count (~135vh/beat).
+
+**Verified (headless WebGL, swiftshader):** `pnpm build` clean; `/experience` = 2.38 kB /
+89.9 kB first load; all 9 beats sequence with real copy; portal fires at the garden→Angelica
+seam; chakra orbs ignite; cameos + CTA present; responsive at 375/768/1440; **zero console
+errors across 5 runs.**
+
+**Key decisions / learnings recorded:**
+- **Overlays are deliberately NOT Framer Motion.** `motion.*` components invoke Framer's WAAPI
+  accelerated path, which throws a benign-but-noisy `"offsets must be monotonically
+  non-decreasing"` TypeError racing the scroll-linked values on first paint (every load; not
+  fixed by `times`/yoyo/CSS-conversion/deferred-mount/`ssr:false`). These overlays are pure
+  scroll→style mappings, so a single rAF loop writing `opacity`/`transform` straight to plain
+  elements is the right tool — no WAAPI, zero console errors, and it dropped the route from
+  148 kB → 89.9 kB (framer-motion out of the chunk). Float/bob use CSS keyframes.
+- **Tailwind `content` must include `src/experience/`** — it didn't, so every class used *only*
+  in the experience layer (`bottom-[11vh]`, `right-[6vw]`, `glass-warm`, …) was purged and
+  overlays mis-rendered (copy stuck top-left, no card). Fixed in `tailwind.config.ts`.
+
+**Open / deferred to later phases:**
+- Chakra-orb prominence on mobile (375) is faint against the bright arrival plate — refine in
+  Phase 5 (responsive/perf pass). Headless swiftshader also over-brightens bloom vs real GPU.
+- `/experience` is still a standalone route; homepage swap + nav/progress UI = Phase 4.
+
+<details><summary>Original Phase 3 scope</summary>
+
+**Goal:** Wire the full narrative.
+**Scope:** Sequence all scenes along scroll progress · Golden Door portal shader transition ·
+chakra-light ignition on the Crystal Mountain beat · beat-synced HTML overlays (Fraunces +
+Caveat) per scene.
+**Exit:** Every beat lands; portal + chakra moments feel "wow"; copy is real, not lorem.
+</details>
 
 ## Phase 4 — Overlay UI, content & CTAs
 
